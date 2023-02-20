@@ -2,12 +2,29 @@
   "name": "twitter-clone-reactjs",
   "private": true,
   "version": "0.0.0",
+  "description": "Twitter Clone written in React.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vonubat/twitter-clone-reactjs.git"
+  },
+  "author": "Vonubat <vonubat@gmail.com>",
+  "keywords": [
+    "twitter",
+    "react",
+    "tailwindcss",
+    "vite"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vonubat/twitter-clone-reactjs/issues"
+  },
+  "homepage": "https://github.com/Vonubat/twitter-clone-reactjs#readme",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

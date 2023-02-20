@@ -1,0 +1,1 @@
+export { useStateWithLocalStorage } from './useStateWithLocalStorage';

@@ -1,2 +1,2 @@
-export { Header } from './layout/Header';
+export { Layout } from './layout/Layout';
 export { Button } from './ui/Button';

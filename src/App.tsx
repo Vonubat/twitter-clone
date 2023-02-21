@@ -1,9 +1,10 @@
+import { Header } from './components';
 import { TwitterContextProvider } from './hooks';
 
 const App = (): JSX.Element => {
   return (
     <TwitterContextProvider>
-      <div>Hello world!</div>
+      <Header />
     </TwitterContextProvider>
   );
 };

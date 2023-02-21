@@ -6,7 +6,7 @@ export const Header = (): JSX.Element => {
   const { ownerId } = useTwitter();
 
   return (
-    <header className="w-screen h-12 flex items-center justify-around">
+    <header className="w-full h-12 flex items-center justify-around">
       <div className="logo__wrapper flex gap-3">
         <img src={logo} alt="logo icon" />
         <h1 className="font-semibold text-sky-500">Guccitter</h1>

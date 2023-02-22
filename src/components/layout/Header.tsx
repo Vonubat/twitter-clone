@@ -29,11 +29,15 @@ export const Header = (): JSX.Element => {
         </div>
       </NavLink>
       <div className="button__wrapper flex gap-3">
-        {!ownerId && (
-          <Button size="small" type="button" color="transparent" onClick={handleLogIn}>
-            Log In
-          </Button>
-        )}
+        <Button
+          externalStyle={ownerId ? 'invisible' : ' visible'}
+          size="small"
+          type="button"
+          color="transparent"
+          onClick={handleLogIn}
+        >
+          Log In
+        </Button>
         <Button size="small" type="button" color="solid" onClick={ownerId ? handleLogOut : handleSignUp}>
           {ownerId ? 'Log out' : 'Sign up'}
         </Button>

@@ -2,12 +2,13 @@ type Props = {
   size: 'small' | 'large';
   type: 'button' | 'submit' | 'reset';
   color: 'solid' | 'transparent';
+  externalStyle?: string;
   disabled?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
 };
 
-export const Button = ({ size, type, color, disabled, onClick, children }: Props): JSX.Element => {
+export const Button = ({ size, type, color, externalStyle, disabled, onClick, children }: Props): JSX.Element => {
   const style = {
     base: `font-bold px-4 rounded-full focus:ring focus:ring-blue-300 h-8 text-center`,
     disabledBtn: `pointer-events-none opacity-60`,
@@ -20,7 +21,7 @@ export const Button = ({ size, type, color, disabled, onClick, children }: Props
     },
   };
 
-  const className = `${style.base}
+  const className = `${style.base} ${externalStyle}
   ${disabled ? style.disabledBtn : style.nonDisabledBtn}
   ${style.btnColor[color]}
   ${style.btnSize[size]}`;

@@ -1,4 +1,6 @@
-import { LogInMsg, SignUpMsg } from '../constants';
+import { Dispatch } from 'react';
+
+import { ValidationMsg } from '../constants';
 
 export interface ILike {
   userId: string;
@@ -29,10 +31,12 @@ export interface ITwitterContext {
   logIn: ILogIn;
   logOut: ILogOut;
   signUp: ISignUp;
+  showAuthModal: ModalAuthType;
+  setShowAuthModal: Dispatch<React.SetStateAction<ModalAuthType>>;
 }
 
 export interface ILogIn {
-  (username: string, password: string): LogInMsg;
+  (data: InputAuth): ValidationMsg.cantFindUser | ValidationMsg.success;
 }
 
 export interface ILogOut {
@@ -40,5 +44,15 @@ export interface ILogOut {
 }
 
 export interface ISignUp {
-  (firstName: string, lastName: string, username: string, location: string, _password: string): SignUpMsg;
+  (data: InputAuth): ValidationMsg.userIsExist | ValidationMsg.success;
 }
+
+export type ModalAuthType = 'login' | 'signup' | null;
+
+export type InputAuth = {
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  location: string;
+};

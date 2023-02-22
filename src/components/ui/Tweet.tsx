@@ -1,5 +1,5 @@
 import defaultAvatar from '../../assets/default_avatar.png';
-import likeIcon from '../../assets/icons/like.svg';
+import { ReactComponent as Like } from '../../assets/icons/like.svg';
 import { IUser } from '../../types';
 
 type Props = {
@@ -23,7 +23,7 @@ export const Tweet = ({ user, index }: Props): JSX.Element => {
         </div>
         <span className="tweet-content__content mt-1">{user.tweets[index].text}</span>
         <div className="tweet-content__likes flex items-center gap-2 mt-3">
-          <img src={likeIcon} alt="like icon" />
+          <Like className="cursor-pointer" />
           <span className="text-black opacity-50">{user.tweets[index].likes.length}</span>
         </div>
       </article>

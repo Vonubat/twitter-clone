@@ -14,3 +14,10 @@ export enum ValidationMsg {
   noSpaces = `Spaces don't allow`,
   success = 'success',
 }
+
+export enum Path {
+  welcomePage = '/',
+  userPage = '/:username',
+  userNotFound = 'User not found',
+  any = '*',
+}

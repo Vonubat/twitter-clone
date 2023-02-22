@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 
 import { AUTH_KEY, DB_KEY, ValidationMsg } from '../constants';
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ children }: Props): JSX.Element => {
+  const navigate = useNavigate();
   const dbLS: string | null = localStorage.getItem(DB_KEY);
   const [users, setUsers] = useStateWithLocalStorage<IUser[]>(DB_KEY, dbLS ? JSON.parse(dbLS, reviver) : dbJSON);
   const ownerIdLS: string | null = localStorage.getItem(AUTH_KEY);
@@ -34,10 +36,11 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       }
 
       setOwnerId(owner.id);
+      navigate(`/${owner.username}`);
 
       return ValidationMsg.success;
     },
-    [setOwnerId, users],
+    [navigate, setOwnerId, users],
   );
 
   const logOut: ILogOut = useCallback(() => {
@@ -74,10 +77,11 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
 
       setUsers([...users, newUser]);
       setOwnerId(newUser.id);
+      navigate(`/${newUser.username}`);
 
       return ValidationMsg.success;
     },
-    [setOwnerId, setUsers, users],
+    [navigate, setOwnerId, setUsers, users],
   );
 
   const providerValue: ITwitterContext = useMemo(

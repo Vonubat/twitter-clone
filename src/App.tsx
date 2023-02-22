@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
 import { Layout } from './components';
+import { Path } from './constants';
 import { TwitterContextProvider } from './hooks';
 import { PageNotFound, UserPage, WelcomePage } from './pages';
 
@@ -8,10 +9,10 @@ const App = (): JSX.Element => {
   return (
     <TwitterContextProvider>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path={Path.welcomePage} element={<Layout />}>
           <Route index element={<WelcomePage />} />
-          <Route path="/user/:username" element={<UserPage />} />
-          <Route path="*" element={<PageNotFound />} />
+          <Route path={Path.userPage} element={<UserPage />} />
+          <Route path={Path.any} element={<PageNotFound />} />
         </Route>
       </Routes>
     </TwitterContextProvider>

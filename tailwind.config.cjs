@@ -4,11 +4,11 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        'welcome-bg': 'welcome-bg-keyframe 6s ease infinite',
+        bg: 'bg-keyframe 6s ease infinite',
         append: 'append-keyframe 0.5s linear',
       },
       keyframes: {
-        'welcome-bg-keyframe': {
+        'bg-keyframe': {
           '0%, 100%': { 'background-position': '0% 50%' },
           '50%': { 'background-position': '100% 50%' },
         },

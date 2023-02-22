@@ -65,7 +65,7 @@ export const Search = (): JSX.Element => {
           <div className="py-3 text-sm">
             {foundedUsers.map((user) => {
               return (
-                <NavLink key={user.id} to={`/user/@${user.username}`}>
+                <NavLink key={user.id} to={`/${user.username}`}>
                   <div className="flex items-center cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
                     <div className="flex-grow font-medium px-2">{`${user.firstName} ${user.lastName} (@${user.username})`}</div>
                     <img

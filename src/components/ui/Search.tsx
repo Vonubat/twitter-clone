@@ -1,7 +1,7 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import defaultAvatart from '../../assets/default_avatar.png';
+import defaultAvatar from '../../assets/default_avatar.png';
 import { useDebounce, useTwitter } from '../../hooks';
 import { IUser } from '../../types';
 
@@ -68,11 +68,7 @@ export const Search = (): JSX.Element => {
                 <NavLink key={user.id} to={`/${user.username}`}>
                   <div className="flex items-center cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
                     <div className="flex-grow font-medium px-2">{`${user.firstName} ${user.lastName} (@${user.username})`}</div>
-                    <img
-                      className="w-10 h-10 rounded-full"
-                      src={user.avatar ? user.avatar : defaultAvatart}
-                      alt="Rounded avatar"
-                    />
+                    <img className="w-10 h-10 rounded-full" src={user.avatar || defaultAvatar} alt="Rounded avatar" />
                   </div>
                 </NavLink>
               );

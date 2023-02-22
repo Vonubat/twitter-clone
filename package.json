@@ -29,6 +29,8 @@
     "nanoid": "^4.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.1",
+    "react-overlays": "^5.2.1",
     "react-router-dom": "^6.8.1"
   },
   "devDependencies": {

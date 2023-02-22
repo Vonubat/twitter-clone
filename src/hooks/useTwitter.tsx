@@ -1,9 +1,9 @@
-import React, { createContext, useCallback, useContext, useMemo } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { nanoid } from 'nanoid';
 
-import { AUTH_KEY, DB_KEY, LogInMsg, SignUpMsg } from '../constants';
+import { AUTH_KEY, DB_KEY, ValidationMsg } from '../constants';
 import dbJSON from '../db/db.json';
-import { ILogIn, ILogOut, ISignUp, ITwitterContext, IUser } from '../types';
+import { ILogIn, ILogOut, ISignUp, ITwitterContext, IUser, ModalAuthType } from '../types';
 import { reviver } from '../utils';
 
 import { useStateWithLocalStorage } from './useStateWithLocalStorage';
@@ -22,19 +22,20 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     AUTH_KEY,
     ownerIdLS ? JSON.parse(ownerIdLS) : null,
   );
+  const [showAuthModal, setShowAuthModal] = useState<ModalAuthType>(null);
 
   const logIn: ILogIn = useCallback(
-    (username, password) => {
+    ({ username, password }) => {
       // before connecting the real database username === password
       const owner: IUser | undefined = users.find(({ username: ref }) => username === ref && password === ref);
 
       if (!owner) {
-        return LogInMsg.cantFindUser;
+        return ValidationMsg.cantFindUser;
       }
 
       setOwnerId(owner.id);
 
-      return LogInMsg.success;
+      return ValidationMsg.success;
     },
     [setOwnerId, users],
   );
@@ -44,24 +45,12 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
   }, [setOwnerId]);
 
   const signUp: ISignUp = useCallback(
-    (firstName, lastName, username, location, _password) => {
+    ({ firstName, lastName, username, location }) => {
       // password is not saved
-      const isEmptyField = !(
-        firstName.trim() &&
-        lastName.trim() &&
-        username.trim() &&
-        location.trim() &&
-        _password.trim()
-      );
-
-      if (isEmptyField) {
-        return SignUpMsg.emptyField;
-      }
-
       const isExistUserWithEqualUsername: IUser | undefined = users.find(({ username: ref }) => username === ref);
 
       if (isExistUserWithEqualUsername) {
-        return SignUpMsg.userIsExist;
+        return ValidationMsg.userIsExist;
       }
 
       const newUser: IUser = {
@@ -86,7 +75,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       setUsers([...users, newUser]);
       setOwnerId(newUser.id);
 
-      return SignUpMsg.success;
+      return ValidationMsg.success;
     },
     [setOwnerId, setUsers, users],
   );
@@ -98,8 +87,10 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       logIn,
       logOut,
       signUp,
+      showAuthModal,
+      setShowAuthModal,
     }),
-    [users, ownerId, logIn, logOut, signUp],
+    [users, ownerId, logIn, logOut, signUp, showAuthModal, setShowAuthModal],
   );
 
   return <TwitterContext.Provider value={providerValue}>{children}</TwitterContext.Provider>;

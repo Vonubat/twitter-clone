@@ -18,7 +18,10 @@ interface Props {
 export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ children }: Props): JSX.Element => {
   const navigate = useNavigate();
   const dbLS: string | null = localStorage.getItem(DB_KEY);
-  const [users, setUsers] = useStateWithLocalStorage<IUser[]>(DB_KEY, dbLS ? JSON.parse(dbLS, reviver) : dbJSON);
+  const [users, setUsers] = useStateWithLocalStorage<IUser[]>(
+    DB_KEY,
+    dbLS ? JSON.parse(dbLS, reviver) : JSON.parse(JSON.stringify(dbJSON), reviver),
+  );
   const ownerIdLS: string | null = localStorage.getItem(AUTH_KEY);
   const [ownerId, setOwnerId] = useStateWithLocalStorage<string | null>(
     AUTH_KEY,

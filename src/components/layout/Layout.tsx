@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
 import { ModalAuth } from '../modal/ModalAuth';
-import { ModalEditor } from '../modal/ModalEditTweet';
+import { ModalEditor } from '../modal/ModalEditor';
 import { ModalGetUrl } from '../modal/ModalGetUrl';
 
 import { Header } from './Header';

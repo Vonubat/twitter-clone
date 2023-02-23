@@ -5,10 +5,10 @@ import { ILike, IUser } from '../../types';
 
 type Props = {
   user: IUser;
-  index: number;
+  currentTweetIndex: number;
 };
 
-export const Tweet = ({ user, index }: Props): JSX.Element => {
+export const Tweet = ({ user, currentTweetIndex }: Props): JSX.Element => {
   const { ownerId, setShowAuthModal, likeTweet } = useTwitter();
 
   const handleAnonymousClick = (): void => {
@@ -16,7 +16,7 @@ export const Tweet = ({ user, index }: Props): JSX.Element => {
   };
 
   const handleSignedClick = (): void => {
-    likeTweet(user.tweets[index].tweetId, user.username);
+    likeTweet(user, currentTweetIndex);
   };
 
   const checkIsOwnerLikePresent = (): boolean => {
@@ -24,7 +24,7 @@ export const Tweet = ({ user, index }: Props): JSX.Element => {
       return false;
     }
 
-    const ownerLike: ILike | undefined = user.tweets[index].likes.find(({ userId }) => userId === ownerId);
+    const ownerLike: ILike | undefined = user.tweets[currentTweetIndex].likes.find(({ userId }) => userId === ownerId);
 
     if (!ownerLike) {
       return false;
@@ -40,19 +40,19 @@ export const Tweet = ({ user, index }: Props): JSX.Element => {
         <div className="tweet-content__info flex items-center gap-2">
           <h3 className="text-black text-lg font-semibold">{`${user.firstName} ${user.lastName}`}</h3>
           <span className="text-black opacity-50">{`@${user.username}`}</span>
-          <span className="text-black opacity-50">{`${user.tweets[index].date.getDate()} ${user.tweets[
-            index
+          <span className="text-black opacity-50">{`${user.tweets[currentTweetIndex].date.getDate()} ${user.tweets[
+            currentTweetIndex
           ].date.toLocaleString('en-US', {
             month: 'short',
           })} `}</span>
         </div>
-        <span className="tweet-content__content mt-1">{user.tweets[index].text}</span>
+        <span className="tweet-content__content mt-1">{user.tweets[currentTweetIndex].text}</span>
         <div className="tweet-content__likes flex items-center gap-2 mt-3">
           <Like
             className={`cursor-pointer ${checkIsOwnerLikePresent() ? 'fill-red-700' : 'fill-none'}`}
             onClick={ownerId ? handleSignedClick : handleAnonymousClick}
           />
-          <span className="text-black opacity-50">{user.tweets[index].likes.length}</span>
+          <span className="text-black opacity-50">{user.tweets[currentTweetIndex].likes.length}</span>
         </div>
       </article>
     </div>

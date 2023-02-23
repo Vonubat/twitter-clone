@@ -16,7 +16,7 @@ export const Tweet = ({ user, index }: Props): JSX.Element => {
   };
 
   const handleSignedClick = (): void => {
-    likeTweet(user.tweets[index].tweetId);
+    likeTweet(user.tweets[index].tweetId, user.username);
   };
 
   const checkIsOwnerLikePresent = (): boolean => {

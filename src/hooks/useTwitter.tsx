@@ -88,20 +88,18 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
   );
 
   const likeTweet = useCallback(
-    (tweetId: string) => {
+    (tweetId: string, username: string) => {
       const updatedUsers = users.map((user) => {
-        if (user.id === ownerId) {
+        if (user.username === username) {
           try {
             const { tweets } = user;
             const targetTweet = tweets.find(({ tweetId: ref }) => tweetId === ref) as ITweet;
             const tweetsWithoutTargetTweet = tweets.filter(({ tweetId: ref }) => tweetId !== ref);
 
-            console.log(targetTweet);
-
             const ownerLike = targetTweet.likes.find(({ userId }) => userId === ownerId);
             const updatedLikes = ownerLike
               ? targetTweet.likes.filter(({ userId }) => userId !== ownerId)
-              : [...targetTweet.likes, { userId: ownerId }];
+              : [...targetTweet.likes, { userId: ownerId as string }];
 
             const targetTweetWithUpdatedLikes = { ...targetTweet, likes: [...updatedLikes] };
 

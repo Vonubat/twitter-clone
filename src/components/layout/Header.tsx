@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
-import logo from '../../assets/icons/logo.png';
+import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
 import { Path } from '../../constants';
 import { useTwitter } from '../../hooks';
 import { Button } from '../ui/Button';
@@ -24,7 +24,7 @@ export const Header = (): JSX.Element => {
     <header className="w-full h-12 flex items-center justify-around">
       <NavLink to={Path.welcomePage}>
         <div className="logo__wrapper flex gap-3">
-          <img src={logo} alt="logo icon" />
+          <Logo className="w-7 h-7" />
           <h1 className="font-semibold text-sky-500">Guccitter</h1>
         </div>
       </NavLink>

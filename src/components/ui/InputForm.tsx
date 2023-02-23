@@ -41,7 +41,7 @@ export const InputForm = ({ form, name, type, placeholder }: Props): JSX.Element
             },
           }),
         })}
-        className="placeholder:text-xs placeholder:font-extralight outline outline-1 outline-neutral-200 focus:outline-neutral-500 focus:outline-2 px-3 h-8"
+        className="h-8 px-3 outline outline-1 outline-neutral-200 placeholder:text-xs placeholder:font-extralight focus:outline-2 focus:outline-neutral-500"
         type={type}
         placeholder={placeholder}
       />

@@ -21,10 +21,10 @@ export const Header = (): JSX.Element => {
   };
 
   return (
-    <header className="w-full h-12 flex items-center justify-around">
+    <header className="flex h-12 w-full items-center justify-around">
       <NavLink to={Path.welcomePage}>
         <div className="logo__wrapper flex gap-3">
-          <Logo className="w-7 h-7" />
+          <Logo className="h-7 w-7" />
           <h1 className="font-semibold text-sky-500">Guccitter</h1>
         </div>
       </NavLink>

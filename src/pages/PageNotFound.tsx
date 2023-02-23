@@ -5,13 +5,13 @@ import { Button } from '../components';
 import { Path } from '../constants';
 
 export const PageNotFound = (): JSX.Element => (
-  <main className="page-not-found__wrapper animate-bg bg-[length:200%_200%] bg-gradient-to-r from-rose-50 to-rose-300 grow overflow-hidden ">
+  <main className="page-not-found__wrapper grow animate-bg overflow-hidden bg-gradient-to-r from-rose-50 to-rose-300 bg-[length:200%_200%] ">
     <div className="h-[150px] w-[150px] animate-random-move-x">
       <div className="h-[150px] w-[150px] animate-random-move-y">
         <Logo className="h-[150px] w-[150px] animate-spin" />
       </div>
     </div>
-    <div className="page-not-found__message relative bg-white/70 rounded-md m-auto text-center w-80 p-7 z-50 mb-3">
+    <div className="page-not-found__message relative z-50 m-auto mb-3 w-80 rounded-md bg-white/70 p-7 text-center">
       <h2 className="text-2xl font-bold">404</h2>
       <h3 className="text-xl font-semibold">Page not found</h3>
       <p className="my-5">

@@ -74,31 +74,31 @@ export const ModalAuth = (): JSX.Element => {
   }, [isValidating, clearErrors]);
 
   const renderBackdrop = (props: RenderModalBackdropProps) => (
-    <div className="fixed z-50 top-0 right-0  bottom-0 left-0 bg-black/50" {...props} />
+    <div className="fixed top-0 right-0 bottom-0  left-0 z-50 bg-black/50" {...props} />
   );
 
   return (
     <Modal
-      className="modal p-7 w-[300px] flex flex-col items-center fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-50 bg-white rounded-md shadow-md"
+      className="modal fixed top-1/2 left-1/2 z-50 flex w-[300px] -translate-y-1/2 -translate-x-1/2 flex-col items-center rounded-md bg-white p-7 shadow-md"
       show={!!showAuthModal}
       onHide={handleClose}
       renderBackdrop={renderBackdrop}
     >
       <>
         <div className="modal__header w-full">
-          <div className="modal__title font-semibold text-lg text-black text-opacity-50 text-center">
+          <div className="modal__title text-center text-lg font-semibold text-black text-opacity-50">
             {showAuthModal === 'login' ? 'Log In' : 'Sign Up'}
           </div>
           {showAuthModal === 'signup' && (
             <button
-              className="modal__link text-sm text-black  text-opacity-50 hover:underline underline-offset-4"
+              className="modal__link text-sm text-black  text-opacity-50 underline-offset-4 hover:underline"
               onClick={() => setShowAuthModal('login')}
             >
               Already signed up?
             </button>
           )}
         </div>
-        <form className="modal__desc w-full flex flex-col gap-4 pt-5" onSubmit={handleSubmit(handleFormSubmit)}>
+        <form className="modal__desc flex w-full flex-col gap-4 pt-5" onSubmit={handleSubmit(handleFormSubmit)}>
           <InputForm form={form} name="username" type="text" placeholder="Nickname" />
           <InputForm form={form} name="password" type="password" placeholder="Password" />
           {showAuthModal === 'signup' && (
@@ -117,7 +117,7 @@ export const ModalAuth = (): JSX.Element => {
           </Button>
         </form>
 
-        <button className="button__close w-5 h-5 absolute -top-6 -right-6" onClick={handleClose}>
+        <button className="button__close absolute -top-6 -right-6 h-5 w-5" onClick={handleClose}>
           <img src={closeBtn} alt="close btn" />
         </button>
       </>

@@ -34,11 +34,11 @@ export const Tweet = ({ user, currentTweetIndex }: Props): JSX.Element => {
   };
 
   return (
-    <div className="tweet bg-white flex gap-5 p-3 ">
-      <img className="w-12 h-12 rounded-full" src={user.avatar || defaultAvatar} alt="Avatar" />
+    <div className="tweet flex gap-5 bg-white p-3 ">
+      <img className="h-12 w-12 rounded-full" src={user.avatar || defaultAvatar} alt="Avatar" />
       <article className="tweet-content flex flex-col">
         <div className="tweet-content__info flex items-center gap-2">
-          <h3 className="text-black text-lg font-semibold">{`${user.firstName} ${user.lastName}`}</h3>
+          <h3 className="text-lg font-semibold text-black">{`${user.firstName} ${user.lastName}`}</h3>
           <span className="text-black opacity-50">{`@${user.username}`}</span>
           <span className="text-black opacity-50">{`${user.tweets[currentTweetIndex].date.getDate()} ${user.tweets[
             currentTweetIndex
@@ -47,7 +47,7 @@ export const Tweet = ({ user, currentTweetIndex }: Props): JSX.Element => {
           })} `}</span>
         </div>
         <span className="tweet-content__content mt-1">{user.tweets[currentTweetIndex].text}</span>
-        <div className="tweet-content__likes flex items-center gap-2 mt-3">
+        <div className="tweet-content__likes mt-3 flex items-center gap-2">
           <Like
             className={`cursor-pointer ${checkIsOwnerLikePresent() ? 'fill-red-700' : 'fill-none'}`}
             onClick={ownerId ? handleSignedClick : handleAnonymousClick}

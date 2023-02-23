@@ -5,12 +5,12 @@ import Modal, { RenderModalBackdropProps } from 'react-overlays/cjs/Modal';
 import closeBtn from '../../assets/icons/close.png';
 import { ValidationMsg } from '../../constants';
 import { useTwitter } from '../../hooks';
-import { InputAuth } from '../../types';
+import { CustomFormInputs } from '../../types';
 import { Button } from '../ui/Button';
 import { InputForm } from '../ui/InputForm';
 
 export const ModalAuth = (): JSX.Element => {
-  const form = useForm<InputAuth>();
+  const form = useForm<CustomFormInputs>();
   const {
     handleSubmit,
     reset,
@@ -22,7 +22,7 @@ export const ModalAuth = (): JSX.Element => {
 
   const handleClose = (): void => setShowAuthModal(null);
 
-  const handleFormSubmit = (data: InputAuth): void => {
+  const handleFormSubmit = (data: CustomFormInputs): void => {
     if (showAuthModal === 'login') {
       const res = logIn(data);
 

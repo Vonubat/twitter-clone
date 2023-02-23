@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const ControlBar = ({ user }: Props): JSX.Element => {
-  const { ownerId, setShowGetUrlModal } = useTwitter();
+  const { ownerId, setShowGetUrlModal, setShowEditorModal } = useTwitter();
 
   return (
     <div className="flex h-[50px] w-full items-center bg-white">
@@ -16,7 +16,10 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
           <span className="tweets-counter font-semibold text-sky-500">{user.tweets.length}</span>
         </div>
         {ownerId === user.id && (
-          <button className="tweets-btn__add w-full min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500">
+          <button
+            className="tweets-btn__add w-full min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
+            onClick={() => setShowEditorModal('new')}
+          >
             Add new Tweet
           </button>
         )}

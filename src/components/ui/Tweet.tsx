@@ -19,7 +19,7 @@ export const Tweet = ({ user, currentTweetIndex }: Props): JSX.Element => {
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div role="button" tabIndex={0} className="tweet flex gap-5 bg-white p-3 outline-none" onClick={handleTweetClick}>
-      <img className="h-12 w-12 shrink-0 rounded-full" src={user.avatar || defaultAvatar} alt="Avatar" />
+      <img className="h-12 w-12 shrink-0 rounded-full object-cover" src={user.avatar || defaultAvatar} alt="Avatar" />
       <article className="tweet-content flex flex-col">
         <div className="tweet-content__info flex items-center gap-2">
           <h3 className="text-lg font-semibold text-black">{`${user.firstName} ${user.lastName}`}</h3>

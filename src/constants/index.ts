@@ -12,6 +12,7 @@ export enum ValidationMsg {
   userIsExist = 'User with such username is exist',
   empty = 'Field should contains at least 3 chars',
   noSpaces = `Spaces aren't allowed`,
+  nonValidUrl = 'Non-valid URL-address',
   success = 'success',
 }
 

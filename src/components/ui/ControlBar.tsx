@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const ControlBar = ({ user }: Props): JSX.Element => {
-  const { ownerId } = useTwitter();
+  const { ownerId, setShowGetUrlModal } = useTwitter();
 
   return (
     <div className="w-full h-[50px] bg-white flex items-center">
@@ -15,18 +15,24 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
           <span className="text-black font-medium text-opacity-50">Tweets</span>
           <span className="tweets-counter font-semibold text-sky-500">{user.tweets.length}</span>
         </div>
-        {ownerId && (
+        {ownerId === user.id && (
           <button className="tweets-btn__add text-black font-medium text-opacity-50 text-center border-b-2 border-transparent active:border-sky-500 w-full min-w-[100px] max-w-[100px]">
             Add new Tweet
           </button>
         )}
-        {ownerId && (
-          <button className="tweets-btn__change-avatar text-black font-medium text-opacity-50 text-center border-b-2 border-transparent active:border-sky-500 min-w-[100px] max-w-[100px]">
+        {ownerId === user.id && (
+          <button
+            className="tweets-btn__change-avatar text-black font-medium text-opacity-50 text-center border-b-2 border-transparent active:border-sky-500 min-w-[100px] max-w-[100px]"
+            onClick={() => setShowGetUrlModal('avatar')}
+          >
             Change Avatar
           </button>
         )}
-        {ownerId && (
-          <button className="tweets-btn__change-cover text-black font-medium text-opacity-50 text-center border-b-2 border-transparent active:border-sky-500 min-w-[100px] max-w-[100px]">
+        {ownerId === user.id && (
+          <button
+            className="tweets-btn__change-cover text-black font-medium text-opacity-50 text-center border-b-2 border-transparent active:border-sky-500 min-w-[100px] max-w-[100px]"
+            onClick={() => setShowGetUrlModal('cover')}
+          >
             Change Cover
           </button>
         )}

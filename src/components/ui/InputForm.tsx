@@ -1,13 +1,13 @@
 import { UseFormReturn } from 'react-hook-form';
 
 import { ValidationMsg } from '../../constants';
-import { InputAuth } from '../../types';
+import { CustomFormInputs, InputName } from '../../types';
 
 import { ValidationWarning } from './ValidationWarning';
 
 type Props = {
-  form: UseFormReturn<InputAuth, unknown>;
-  name: keyof InputAuth;
+  form: UseFormReturn<CustomFormInputs, unknown>;
+  name: InputName;
   type: 'text' | 'password';
   placeholder?: string;
 };
@@ -31,6 +31,13 @@ export const InputForm = ({ form, name, type, placeholder }: Props): JSX.Element
             pattern: {
               value: /^\S*$/,
               message: ValidationMsg.noSpaces,
+            },
+          }),
+          ...(name === 'url' && {
+            pattern: {
+              value:
+                /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi,
+              message: ValidationMsg.nonValidUrl,
             },
           }),
         })}

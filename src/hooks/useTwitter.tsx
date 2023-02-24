@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 
 import { AUTH_KEY, DB_KEY, ValidationMsg } from '../constants';
 import dbJSON from '../db/db.json';
-import { ILogIn, ILogOut, ISignUp, ITwitterContext, IUser, ModalAuthType } from '../types';
+import { IChangeImg, ILogIn, ILogOut, ISignUp, ITwitterContext, IUser, ModalAuthType, ModalGetUrlType } from '../types';
 import { reviver } from '../utils';
 
 import { useStateWithLocalStorage } from './useStateWithLocalStorage';
@@ -28,6 +28,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     ownerIdLS ? JSON.parse(ownerIdLS) : null,
   );
   const [showAuthModal, setShowAuthModal] = useState<ModalAuthType>(null);
+  const [showGetUrlModal, setShowGetUrlModal] = useState<ModalGetUrlType>(null);
 
   const logIn: ILogIn = useCallback(
     ({ username, password }) => {
@@ -87,6 +88,26 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     [navigate, setOwnerId, setUsers, users],
   );
 
+  const changeImg: IChangeImg = useCallback(
+    ({ url }) => {
+      const key = showGetUrlModal === 'cover' ? 'bgImage' : 'avatar';
+      const updatedUsers = users.map((user) => {
+        if (user.id === ownerId) {
+          const updatedUser = { ...user };
+
+          updatedUser[key] = url;
+
+          return updatedUser;
+        }
+
+        return user;
+      });
+
+      setUsers(updatedUsers);
+    },
+    [ownerId, setUsers, showGetUrlModal, users],
+  );
+
   const likeTweet = useCallback(
     (currentUser: IUser, currentTweetIndex: number) => {
       const updatedUsers = users.map((user) => {
@@ -130,11 +151,26 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       logIn,
       logOut,
       signUp,
+      changeImg,
       showAuthModal,
       setShowAuthModal,
+      showGetUrlModal,
+      setShowGetUrlModal,
       likeTweet,
     }),
-    [users, ownerId, logIn, logOut, signUp, showAuthModal, setShowAuthModal, likeTweet],
+    [
+      users,
+      ownerId,
+      logIn,
+      logOut,
+      signUp,
+      changeImg,
+      showAuthModal,
+      setShowAuthModal,
+      showGetUrlModal,
+      setShowGetUrlModal,
+      likeTweet,
+    ],
   );
 
   return <TwitterContext.Provider value={providerValue}>{children}</TwitterContext.Provider>;

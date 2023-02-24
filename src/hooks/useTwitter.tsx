@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { Context, createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 
@@ -14,12 +14,13 @@ import {
   ITwitterContext,
   IUser,
   ModalForm,
+  ModalTweet,
 } from '../types';
 import { reviver } from '../utils';
 
 import { useStateWithLocalStorage } from './useStateWithLocalStorage';
 
-const TwitterContext: React.Context<ITwitterContext | null> = createContext<ITwitterContext | null>(null);
+const TwitterContext: Context<ITwitterContext | null> = createContext<ITwitterContext | null>(null);
 
 interface Props {
   children: React.ReactNode;
@@ -38,6 +39,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     ownerIdLS ? JSON.parse(ownerIdLS) : null,
   );
   const [showModalForm, setShowModalForm] = useState<ModalForm>(null);
+  const [showModalTweet, setShowModalTweet] = useState<ModalTweet>(null);
 
   const logIn: ILogIn = useCallback(
     ({ username, password }) => {
@@ -118,7 +120,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
   );
 
   const likeTweet: ILikeTweet = useCallback(
-    (currentUser, currentTweetIndex) => {
+    ({ currentUser, currentTweetIndex }) => {
       const updatedUsers = users.map((user) => {
         if (user.username === currentUser.username) {
           const { tweets } = user;
@@ -193,8 +195,23 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       addTweet,
       showModalForm,
       setShowModalForm,
+      showModalTweet,
+      setShowModalTweet,
     }),
-    [users, ownerId, logIn, logOut, signUp, changeImg, likeTweet, addTweet, showModalForm, setShowModalForm],
+    [
+      users,
+      ownerId,
+      logIn,
+      logOut,
+      signUp,
+      changeImg,
+      likeTweet,
+      addTweet,
+      showModalForm,
+      setShowModalForm,
+      showModalTweet,
+      setShowModalTweet,
+    ],
   );
 
   return <TwitterContext.Provider value={providerValue}>{children}</TwitterContext.Provider>;

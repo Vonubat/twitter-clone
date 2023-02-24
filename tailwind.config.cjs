@@ -6,6 +6,8 @@ module.exports = {
       animation: {
         bg: 'bg-keyframe 6s ease infinite',
         append: 'append-keyframe 0.5s linear',
+        'random-move-x': 'x-random-keyframe 2.6s linear infinite alternate',
+        'random-move-y': 'y-random-keyframe 0.8s linear infinite alternate',
       },
       keyframes: {
         'bg-keyframe': {
@@ -15,6 +17,12 @@ module.exports = {
         'append-keyframe': {
           from: { transform: 'scale(0)', opacity: 0 },
           to: { transform: 'scale(1)', opacity: 1 },
+        },
+        'x-random-keyframe': {
+          '100%': { transform: 'translateX(calc(100vw - 150px))' },
+        },
+        'y-random-keyframe': {
+          '100%': { transform: 'translateY(calc(100vh - 150px))' },
         },
       },
     },

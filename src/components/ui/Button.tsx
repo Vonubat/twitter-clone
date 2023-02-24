@@ -10,7 +10,7 @@ type Props = {
 
 export const Button = ({ size, type, color, externalStyle, disabled, onClick, children }: Props): JSX.Element => {
   const style = {
-    base: `font-bold px-4 rounded-full focus:ring focus:ring-blue-300 h-8 text-center`,
+    base: `font-bold px-4 rounded-full focus:ring focus:ring-blue-300 h-8 text-center uppercase`,
     disabledBtn: `pointer-events-none opacity-60`,
     nonDisabledBtn: `hover:shadow-lg focus:shadow-lg active:shadow-lg`,
     btnSize: { small: 'w-28', large: 'w-60' },

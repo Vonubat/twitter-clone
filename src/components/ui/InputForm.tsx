@@ -41,6 +41,9 @@ export const InputForm = ({ form, name, type, placeholder }: Props): JSX.Element
             value: 3,
             message: ValidationMsg.empty,
           },
+          validate: (value) => {
+            return !!value.trim() || ValidationMsg.notOnlySpaces;
+          },
           ...(name !== 'location' &&
             name !== 'contentTextarea' && {
               pattern: {

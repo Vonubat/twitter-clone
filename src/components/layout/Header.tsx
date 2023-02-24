@@ -9,11 +9,11 @@ export const Header = (): JSX.Element => {
   const { ownerId, setShowModalForm, logOut } = useTwitter();
 
   const handleLogIn = (): void => {
-    setShowModalForm('login');
+    setShowModalForm({ type: 'login' });
   };
 
   const handleSignUp = (): void => {
-    setShowModalForm('signup');
+    setShowModalForm({ type: 'signup' });
   };
 
   const handleLogOut = (): void => {

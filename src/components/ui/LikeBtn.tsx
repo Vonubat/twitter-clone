@@ -11,7 +11,7 @@ export const LikeBtn = ({ currentUser, currentTweetIndex }: Props): JSX.Element 
 
   const handleAnonymousClickToLike = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setShowModalForm('signup');
+    setShowModalForm({ type: 'signup' });
   };
 
   const handleSignedClickToLike = (e: MouseEvent<HTMLButtonElement>) => {

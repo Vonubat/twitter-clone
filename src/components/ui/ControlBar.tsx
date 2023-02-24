@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const ControlBar = ({ user }: Props): JSX.Element => {
-  const { ownerId, setShowGetUrlModal, setShowEditorModal } = useTwitter();
+  const { ownerId, setShowModalForm } = useTwitter();
 
   return (
     <div className="flex h-[50px] w-full items-center bg-white">
@@ -18,7 +18,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
         {ownerId === user.id && (
           <button
             className="tweets-btn__add w-full min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
-            onClick={() => setShowEditorModal('new')}
+            onClick={() => setShowModalForm('newTweet')}
           >
             Add new Tweet
           </button>
@@ -26,7 +26,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
         {ownerId === user.id && (
           <button
             className="tweets-btn__change-avatar min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
-            onClick={() => setShowGetUrlModal('avatar')}
+            onClick={() => setShowModalForm('avatar')}
           >
             Change Avatar
           </button>
@@ -34,7 +34,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
         {ownerId === user.id && (
           <button
             className="tweets-btn__change-cover min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
-            onClick={() => setShowGetUrlModal('cover')}
+            onClick={() => setShowModalForm('cover')}
           >
             Change Cover
           </button>

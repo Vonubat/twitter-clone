@@ -34,12 +34,8 @@ export interface ITwitterContext {
   changeImg: IChangeImg;
   likeTweet: ILikeTweet;
   addTweet: IAddTweet;
-  showAuthModal: ModalAuthType;
-  setShowAuthModal: Dispatch<React.SetStateAction<ModalAuthType>>;
-  showGetUrlModal: ModalGetUrlType;
-  setShowGetUrlModal: Dispatch<React.SetStateAction<ModalGetUrlType>>;
-  showEditorModal: ModalEditorType;
-  setShowEditorModal: Dispatch<React.SetStateAction<ModalEditorType>>;
+  showModalForm: ModalForm;
+  setShowModalForm: Dispatch<React.SetStateAction<ModalForm>>;
 }
 
 export interface ILogIn {
@@ -66,11 +62,7 @@ export interface IAddTweet {
   (data: InputEditor): void;
 }
 
-export type ModalAuthType = 'login' | 'signup' | null;
-
-export type ModalGetUrlType = 'avatar' | 'cover' | null;
-
-export type ModalEditorType = 'new' | 'edit' | null;
+export type ModalForm = 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' | 'editTweet' | null;
 
 type InputAuth = {
   username: string;

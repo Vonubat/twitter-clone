@@ -13,9 +13,7 @@ import {
   ISignUp,
   ITwitterContext,
   IUser,
-  ModalAuthType,
-  ModalEditorType,
-  ModalGetUrlType,
+  ModalForm,
 } from '../types';
 import { reviver } from '../utils';
 
@@ -39,9 +37,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     AUTH_KEY,
     ownerIdLS ? JSON.parse(ownerIdLS) : null,
   );
-  const [showAuthModal, setShowAuthModal] = useState<ModalAuthType>(null);
-  const [showGetUrlModal, setShowGetUrlModal] = useState<ModalGetUrlType>(null);
-  const [showEditorModal, setShowEditorModal] = useState<ModalEditorType>(null);
+  const [showModalForm, setShowModalForm] = useState<ModalForm>(null);
 
   const logIn: ILogIn = useCallback(
     ({ username, password }) => {
@@ -103,7 +99,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
 
   const changeImg: IChangeImg = useCallback(
     ({ url }) => {
-      const key = showGetUrlModal === 'cover' ? 'bgImage' : 'avatar';
+      const key = showModalForm === 'cover' ? 'bgImage' : 'avatar';
       const updatedUsers = users.map((user) => {
         if (user.id === ownerId) {
           const updatedUser = { ...user };
@@ -118,7 +114,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
 
       setUsers(updatedUsers);
     },
-    [ownerId, setUsers, showGetUrlModal, users],
+    [ownerId, setUsers, showModalForm, users],
   );
 
   const likeTweet: ILikeTweet = useCallback(
@@ -195,29 +191,10 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       changeImg,
       likeTweet,
       addTweet,
-      showAuthModal,
-      setShowAuthModal,
-      showGetUrlModal,
-      setShowGetUrlModal,
-      showEditorModal,
-      setShowEditorModal,
+      showModalForm,
+      setShowModalForm,
     }),
-    [
-      users,
-      ownerId,
-      logIn,
-      logOut,
-      signUp,
-      changeImg,
-      likeTweet,
-      addTweet,
-      showAuthModal,
-      setShowAuthModal,
-      showGetUrlModal,
-      setShowGetUrlModal,
-      showEditorModal,
-      setShowEditorModal,
-    ],
+    [users, ownerId, logIn, logOut, signUp, changeImg, likeTweet, addTweet, showModalForm, setShowModalForm],
   );
 
   return <TwitterContext.Provider value={providerValue}>{children}</TwitterContext.Provider>;

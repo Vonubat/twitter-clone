@@ -1,8 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-import { ModalAuth } from '../modal/ModalAuth';
-import { ModalEditor } from '../modal/ModalEditor';
-import { ModalGetUrl } from '../modal/ModalGetUrl';
+import { ModalForm } from '../modal/ModalForm';
 
 import { Header } from './Header';
 
@@ -11,9 +9,7 @@ export const Layout = (): JSX.Element => {
     <>
       <Header />
       <Outlet />
-      <ModalAuth />
-      <ModalGetUrl />
-      <ModalEditor />
+      <ModalForm />
     </>
   );
 };

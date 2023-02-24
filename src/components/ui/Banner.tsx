@@ -4,10 +4,10 @@ import { useTwitter } from '../../hooks';
 import { Button } from './Button';
 
 export const Banner = (): JSX.Element => {
-  const { setShowAuthModal } = useTwitter();
+  const { setShowModalForm } = useTwitter();
 
   const handleSignUp = (): void => {
-    setShowAuthModal('signup');
+    setShowModalForm('signup');
   };
 
   return (

@@ -9,10 +9,10 @@ type Props = {
 };
 
 export const Tweet = ({ user, currentTweetIndex }: Props): JSX.Element => {
-  const { ownerId, setShowAuthModal, likeTweet } = useTwitter();
+  const { ownerId, setShowModalForm, likeTweet } = useTwitter();
 
   const handleAnonymousClick = (): void => {
-    setShowAuthModal('signup');
+    setShowModalForm('signup');
   };
 
   const handleSignedClick = (): void => {

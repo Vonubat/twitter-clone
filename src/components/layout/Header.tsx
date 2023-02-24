@@ -6,14 +6,14 @@ import { useTwitter } from '../../hooks';
 import { Button } from '../ui/Button';
 
 export const Header = (): JSX.Element => {
-  const { ownerId, setShowAuthModal, logOut } = useTwitter();
+  const { ownerId, setShowModalForm, logOut } = useTwitter();
 
   const handleLogIn = (): void => {
-    setShowAuthModal('login');
+    setShowModalForm('login');
   };
 
   const handleSignUp = (): void => {
-    setShowAuthModal('signup');
+    setShowModalForm('signup');
   };
 
   const handleLogOut = (): void => {

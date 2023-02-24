@@ -18,7 +18,6 @@ type Ref = HTMLInputElement & HTMLTextAreaElement;
 type RefProps = {
   className: string;
   type: string;
-  autoFocus?: boolean;
   placeholder?: string;
 } & ReturnType<UseFormRegister<CustomFormInputs>>;
 

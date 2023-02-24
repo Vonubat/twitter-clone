@@ -10,7 +10,6 @@ export const UserPage = (): JSX.Element => {
   const { users, ownerId } = useTwitter();
 
   const user: IUser | undefined = users.find(({ username: ref }) => username === ref);
-  // const isOwner = Boolean(users.find(({ id }) => id === ownerId));
 
   return !user ? (
     <Navigate to={Path.userNotFound} />

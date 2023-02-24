@@ -5,5 +5,5 @@ type Props = {
 };
 
 export const Cover = ({ src }: Props): JSX.Element => {
-  return <img className="w-full max-h-[500px] object-cover" src={src || defaultCover} alt="User cover" />;
+  return <img className="max-h-[500px] w-full object-cover" src={src || defaultCover} alt="User cover" />;
 };

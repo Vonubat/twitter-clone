@@ -11,13 +11,13 @@ export const Banner = (): JSX.Element => {
   };
 
   return (
-    <div className="banner__wrapper flex flex-col items-center w-[250px] h-[320px] rounded-md bg-white">
+    <div className="banner__wrapper flex h-[320px] w-[250px] flex-col items-center rounded-md bg-white">
       <img src={bannerBird} alt="banner bird" />
-      <div className="heading__wrapper text-center text-black font-semibold">
+      <div className="heading__wrapper text-center font-semibold text-black">
         <h3>Hey!</h3>
         <h3>Why don&apos;t you join us?</h3>
       </div>
-      <div className="text__wrapper text-center text-black text-sm text-opacity-50 p-3">
+      <div className="text__wrapper p-3 text-center text-sm text-black text-opacity-50">
         <p>It&apos;s simple - just click on sign up button!</p>
       </div>
       <Button size="small" type="button" color="solid" onClick={handleSignUp}>

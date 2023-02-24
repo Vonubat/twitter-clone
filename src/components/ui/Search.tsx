@@ -36,14 +36,14 @@ export const Search = (): JSX.Element => {
   }, [debouncedSearchValue, searchUsers]);
 
   return (
-    <div className="w-2/3 flex justify-center animate-append">
+    <div className="flex w-2/3 animate-append justify-center">
       <div className="w-full max-w-md">
-        <div className="bg-white shadow-md rounded-lg px-3 py-2 mb-4">
-          <div className="block text-gray-700 text-lg font-semibold py-2 px-2">Let&apos;s find new friends</div>
-          <div className="flex items-center bg-gray-200 rounded-md">
+        <div className="mb-4 rounded-lg bg-white px-3 py-2 shadow-md">
+          <div className="block py-2 px-2 text-lg font-semibold text-gray-700">Let&apos;s find new friends</div>
+          <div className="flex items-center rounded-md bg-gray-200">
             <div className="pl-2">
               <svg
-                className="fill-current text-gray-500 w-6 h-6"
+                className="h-6 w-6 fill-current text-gray-500"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
               >
@@ -54,7 +54,7 @@ export const Search = (): JSX.Element => {
               </svg>
             </div>
             <input
-              className="w-full rounded-md bg-gray-200 text-gray-700 leading-tight focus:outline-none py-2 px-2"
+              className="w-full rounded-md bg-gray-200 py-2 px-2 leading-tight text-gray-700 focus:outline-none"
               id="search"
               type="text"
               placeholder="Search..."
@@ -66,9 +66,9 @@ export const Search = (): JSX.Element => {
             {foundedUsers.map((user) => {
               return (
                 <NavLink key={user.id} to={`/${user.username}`}>
-                  <div className="flex items-center cursor-pointer text-gray-700 hover:text-blue-400 hover:bg-blue-100 rounded-md px-2 py-2 my-2">
-                    <div className="flex-grow font-medium px-2">{`${user.firstName} ${user.lastName} (@${user.username})`}</div>
-                    <img className="w-10 h-10 rounded-full" src={user.avatar || defaultAvatar} alt="Rounded avatar" />
+                  <div className="my-2 flex cursor-pointer items-center  rounded-md px-2 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-400">
+                    <div className="flex-grow px-2 font-medium">{`${user.firstName} ${user.lastName} (@${user.username})`}</div>
+                    <img className="h-10 w-10 rounded-full" src={user.avatar || defaultAvatar} alt="Rounded avatar" />
                   </div>
                 </NavLink>
               );

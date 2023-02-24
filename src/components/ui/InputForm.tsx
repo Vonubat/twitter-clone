@@ -15,9 +15,12 @@ type Props = {
 
 type Ref = HTMLInputElement & HTMLTextAreaElement;
 
-type RefProps = { className: string; type: string; autoFocus?: boolean; placeholder?: string } & ReturnType<
-  UseFormRegister<CustomFormInputs>
->;
+type RefProps = {
+  className: string;
+  type: string;
+  autoFocus?: boolean;
+  placeholder?: string;
+} & ReturnType<UseFormRegister<CustomFormInputs>>;
 
 const Input = forwardRef<Ref, RefProps>((props, ref): JSX.Element => {
   return props.name === 'contentTextarea' ? <textarea {...props} ref={ref} /> : <input {...props} ref={ref} />;
@@ -54,9 +57,8 @@ export const InputForm = ({ form, name, type, placeholder }: Props): JSX.Element
           }),
         })}
         className={`${
-          name === 'contentTextarea' ? 'foc h-40 resize-none py-3' : 'h-8'
+          name === 'contentTextarea' ? 'h-40 resize-none py-3' : 'h-8'
         } px-3 outline outline-1 outline-neutral-200 placeholder:text-xs placeholder:font-extralight focus:outline-2 focus:outline-neutral-500`}
-        autoFocus
         type={type}
         placeholder={placeholder}
       />

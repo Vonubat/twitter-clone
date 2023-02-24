@@ -39,6 +39,7 @@ export interface ITwitterContext {
   changeImg: IChangeImg;
   likeTweet: ILikeTweet;
   addTweet: IAddTweet;
+  editTweet: IEditTweet;
   showModalForm: ModalForm;
   setShowModalForm: Dispatch<SetStateAction<ModalForm>>;
   showModalTweet: ModalTweet;
@@ -69,7 +70,18 @@ export interface IAddTweet {
   (data: InputEditor): void;
 }
 
-export type ModalForm = 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' | 'editTweet' | null;
+export interface IEditTweet {
+  (data: InputEditor & { tweetId: ITweet['tweetId'] }): void;
+}
+
+export type ModalForm =
+  | 'login'
+  | 'signup'
+  | 'avatar'
+  | 'cover'
+  | 'newTweet'
+  | { modalFormType: 'editTweet'; text: string; tweetId: ITweet['tweetId'] }
+  | null;
 
 export type ModalTweet = ICurrentTweetInfo | null;
 

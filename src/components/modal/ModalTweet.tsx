@@ -3,12 +3,11 @@ import Modal, { RenderModalBackdropProps } from 'react-overlays/cjs/Modal';
 import defaultAvatar from '../../assets/default_avatar.png';
 import closeBtn from '../../assets/icons/close.png';
 import { useTwitter } from '../../hooks';
+import { Button } from '../ui/Button';
 import { FanAvatars } from '../ui/FansAvatars';
 
 export const ModalTweet = (): JSX.Element => {
-  const { showModalTweet, setShowModalTweet } = useTwitter();
-
-  const handleClose = (): void => setShowModalTweet(null);
+  const { showModalTweet, setShowModalTweet, setShowModalForm, ownerId } = useTwitter();
 
   const renderBackdrop = (props: RenderModalBackdropProps) => (
     <div className="fixed top-0 right-0 bottom-0 left-0 z-50 bg-black/50" {...props} />
@@ -16,7 +15,24 @@ export const ModalTweet = (): JSX.Element => {
 
   const { currentTweetIndex = 0 } = showModalTweet || {};
 
-  const { firstName = '', lastName = '', username = '', tweets = [] } = showModalTweet?.currentUser || {};
+  const {
+    id: userId = '',
+    firstName = '',
+    lastName = '',
+    username = '',
+    tweets = [],
+  } = showModalTweet?.currentUser || {};
+
+  const handleClose = (): void => setShowModalTweet(null);
+
+  const handleEditTweet = (): void => {
+    setShowModalTweet(null);
+    setShowModalForm({
+      modalFormType: 'editTweet',
+      text: tweets[currentTweetIndex].text,
+      tweetId: tweets[currentTweetIndex].tweetId,
+    });
+  };
 
   return (
     <Modal
@@ -63,6 +79,11 @@ export const ModalTweet = (): JSX.Element => {
             <FanAvatars likes={tweets[currentTweetIndex]?.likes} />
           </div>
         </div>
+        {userId === ownerId && (
+          <Button externalStyle="mt-3 self-center" size="large" type="submit" color="solid" onClick={handleEditTweet}>
+            Edit tweet
+          </Button>
+        )}
         <button className="button__close absolute -top-6 -right-6 h-5 w-5" onClick={handleClose}>
           <img src={closeBtn} alt="close btn" />
         </button>

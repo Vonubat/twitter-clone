@@ -7,6 +7,7 @@ import dbJSON from '../db/db.json';
 import {
   IAddTweet,
   IChangeImg,
+  IEditTweet,
   ILikeTweet,
   ILogIn,
   ILogOut,
@@ -183,6 +184,35 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     [ownerId, setUsers, users],
   );
 
+  const editTweet: IEditTweet = useCallback(
+    ({ contentTextarea, tweetId }) => {
+      const updatedUsers = users.map((user) => {
+        if (user.id === ownerId) {
+          const { tweets } = user;
+
+          const updatedTweets = tweets.map((tweet) => {
+            if (tweet.tweetId === tweetId) {
+              const editedTweet = { ...tweet };
+
+              editedTweet.text = contentTextarea;
+
+              return editedTweet;
+            }
+
+            return tweet;
+          });
+
+          return { ...user, tweets: updatedTweets };
+        }
+
+        return user;
+      });
+
+      setUsers(updatedUsers);
+    },
+    [ownerId, setUsers, users],
+  );
+
   const providerValue: ITwitterContext = useMemo(
     () => ({
       users,
@@ -193,6 +223,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       changeImg,
       likeTweet,
       addTweet,
+      editTweet,
       showModalForm,
       setShowModalForm,
       showModalTweet,
@@ -207,6 +238,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       changeImg,
       likeTweet,
       addTweet,
+      editTweet,
       showModalForm,
       setShowModalForm,
       showModalTweet,

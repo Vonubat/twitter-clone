@@ -10,15 +10,17 @@ import { Button } from '../ui/Button';
 import { InputForm } from '../ui/InputForm';
 
 export const ModalForm = (): JSX.Element => {
+  const { showModalForm, setShowModalForm, logIn, signUp, changeImg, addTweet, editTweet } = useTwitter();
+
   const form = useForm<CustomFormInputs>();
   const {
     handleSubmit,
     reset,
     setError,
     clearErrors,
+    setValue,
     formState: { errors, isSubmitSuccessful, isDirty, isValidating },
   } = form;
-  const { showModalForm, setShowModalForm, logIn, signUp, changeImg, addTweet } = useTwitter();
 
   const handleClose = (): void => setShowModalForm(null);
 
@@ -62,6 +64,10 @@ export const ModalForm = (): JSX.Element => {
       addTweet(data);
     }
 
+    if (typeof showModalForm === 'object' && showModalForm) {
+      editTweet({ ...data, tweetId: showModalForm.tweetId });
+    }
+
     setShowModalForm(null);
   };
 
@@ -74,6 +80,16 @@ export const ModalForm = (): JSX.Element => {
       clearErrors();
     }
   }, [clearErrors, isSubmitSuccessful, isValidating, reset]);
+
+  useEffect(() => {
+    if (typeof showModalForm === 'object' && showModalForm) {
+      setValue('contentTextarea', showModalForm.text);
+    }
+
+    if (showModalForm === 'newTweet') {
+      setValue('contentTextarea', '');
+    }
+  }, [setValue, showModalForm]);
 
   const renderBackdrop = (props: RenderModalBackdropProps) => (
     <div className="fixed top-0 right-0 bottom-0 left-0 z-50 bg-black/50" {...props} />
@@ -94,8 +110,8 @@ export const ModalForm = (): JSX.Element => {
             {showModalForm === 'login' && 'Log In'}
             {showModalForm === 'signup' && 'Sign Up'}
             {showModalForm === 'newTweet' && 'Create new tweet'}
-            {showModalForm === 'editTweet' && 'Edit your tweet'}
             {(showModalForm === 'avatar' || showModalForm === 'cover') && `Paste URL for ${showModalForm} image`}
+            {typeof showModalForm === 'object' && 'Edit your tweet'}
           </div>
           {showModalForm === 'signup' && (
             <button
@@ -121,11 +137,14 @@ export const ModalForm = (): JSX.Element => {
           {(showModalForm === 'avatar' || showModalForm === 'cover') && (
             <InputForm form={form} name="url" type="text" placeholder="URL" />
           )}
-          {(showModalForm === 'newTweet' || showModalForm === 'editTweet') && (
+          {showModalForm === 'newTweet' && (
+            <InputForm form={form} name="contentTextarea" type="text" placeholder="Write a tweet..." />
+          )}
+          {typeof showModalForm === 'object' && (
             <InputForm form={form} name="contentTextarea" type="text" placeholder="Write a tweet..." />
           )}
           <Button
-            externalStyle="mt-3"
+            externalStyle="mt-3 self-center"
             size="large"
             type="submit"
             color="solid"
@@ -134,8 +153,8 @@ export const ModalForm = (): JSX.Element => {
             {showModalForm === 'login' && 'Log In'}
             {showModalForm === 'signup' && 'Sign Up'}
             {showModalForm === 'newTweet' && 'Create tweet'}
-            {showModalForm === 'editTweet' && 'Edit tweet'}
             {(showModalForm === 'avatar' || showModalForm === 'cover') && `Change ${showModalForm}`}
+            {typeof showModalForm === 'object' && 'Edit tweet'}
           </Button>
         </form>
 

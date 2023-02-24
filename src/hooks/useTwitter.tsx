@@ -4,7 +4,19 @@ import { nanoid } from 'nanoid';
 
 import { AUTH_KEY, DB_KEY, ValidationMsg } from '../constants';
 import dbJSON from '../db/db.json';
-import { IChangeImg, ILogIn, ILogOut, ISignUp, ITwitterContext, IUser, ModalAuthType, ModalGetUrlType } from '../types';
+import {
+  IAddTweet,
+  IChangeImg,
+  ILikeTweet,
+  ILogIn,
+  ILogOut,
+  ISignUp,
+  ITwitterContext,
+  IUser,
+  ModalAuthType,
+  ModalEditorType,
+  ModalGetUrlType,
+} from '../types';
 import { reviver } from '../utils';
 
 import { useStateWithLocalStorage } from './useStateWithLocalStorage';
@@ -29,6 +41,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
   );
   const [showAuthModal, setShowAuthModal] = useState<ModalAuthType>(null);
   const [showGetUrlModal, setShowGetUrlModal] = useState<ModalGetUrlType>(null);
+  const [showEditorModal, setShowEditorModal] = useState<ModalEditorType>(null);
 
   const logIn: ILogIn = useCallback(
     ({ username, password }) => {
@@ -108,8 +121,8 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     [ownerId, setUsers, showGetUrlModal, users],
   );
 
-  const likeTweet = useCallback(
-    (currentUser: IUser, currentTweetIndex: number) => {
+  const likeTweet: ILikeTweet = useCallback(
+    (currentUser, currentTweetIndex) => {
       const updatedUsers = users.map((user) => {
         if (user.username === currentUser.username) {
           const { tweets } = user;
@@ -144,6 +157,34 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     [ownerId, setUsers, users],
   );
 
+  const addTweet: IAddTweet = useCallback(
+    ({ contentTextarea }) => {
+      const updatedUsers = users.map((user) => {
+        if (user.id === ownerId) {
+          const { tweets } = user;
+
+          tweets.reverse();
+          const newTweet = {
+            tweetId: nanoid(),
+            text: contentTextarea,
+            likes: [],
+            date: new Date(),
+          };
+
+          tweets.push(newTweet);
+          tweets.reverse();
+
+          return user;
+        }
+
+        return user;
+      });
+
+      setUsers(updatedUsers);
+    },
+    [ownerId, setUsers, users],
+  );
+
   const providerValue: ITwitterContext = useMemo(
     () => ({
       users,
@@ -152,11 +193,14 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       logOut,
       signUp,
       changeImg,
+      likeTweet,
+      addTweet,
       showAuthModal,
       setShowAuthModal,
       showGetUrlModal,
       setShowGetUrlModal,
-      likeTweet,
+      showEditorModal,
+      setShowEditorModal,
     }),
     [
       users,
@@ -165,11 +209,14 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       logOut,
       signUp,
       changeImg,
+      likeTweet,
+      addTweet,
       showAuthModal,
       setShowAuthModal,
       showGetUrlModal,
       setShowGetUrlModal,
-      likeTweet,
+      showEditorModal,
+      setShowEditorModal,
     ],
   );
 

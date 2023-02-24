@@ -35,7 +35,7 @@ export const Tweet = ({ user, currentTweetIndex }: Props): JSX.Element => {
 
   return (
     <div className="tweet flex gap-5 bg-white p-3 ">
-      <img className="h-12 w-12 rounded-full" src={user.avatar || defaultAvatar} alt="Avatar" />
+      <img className="h-12 w-12 min-w-max rounded-full" src={user.avatar || defaultAvatar} alt="Avatar" />
       <article className="tweet-content flex flex-col">
         <div className="tweet-content__info flex items-center gap-2">
           <h3 className="text-lg font-semibold text-black">{`${user.firstName} ${user.lastName}`}</h3>
@@ -52,7 +52,7 @@ export const Tweet = ({ user, currentTweetIndex }: Props): JSX.Element => {
             className={`cursor-pointer ${checkIsOwnerLikePresent() ? 'fill-red-700' : 'fill-none'}`}
             onClick={ownerId ? handleSignedClick : handleAnonymousClick}
           />
-          <span className="text-black opacity-50">{user.tweets[currentTweetIndex].likes.length}</span>
+          <span className="select-none text-black opacity-50">{user.tweets[currentTweetIndex].likes.length}</span>
         </div>
       </article>
     </div>

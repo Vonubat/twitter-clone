@@ -32,11 +32,14 @@ export interface ITwitterContext {
   logOut: ILogOut;
   signUp: ISignUp;
   changeImg: IChangeImg;
+  likeTweet: ILikeTweet;
+  addTweet: IAddTweet;
   showAuthModal: ModalAuthType;
   setShowAuthModal: Dispatch<React.SetStateAction<ModalAuthType>>;
   showGetUrlModal: ModalGetUrlType;
   setShowGetUrlModal: Dispatch<React.SetStateAction<ModalGetUrlType>>;
-  likeTweet: (currentUser: IUser, currentTweetIndex: number) => void;
+  showEditorModal: ModalEditorType;
+  setShowEditorModal: Dispatch<React.SetStateAction<ModalEditorType>>;
 }
 
 export interface ILogIn {
@@ -55,9 +58,19 @@ export interface IChangeImg {
   (data: InputGetUrl): void;
 }
 
+export interface ILikeTweet {
+  (currentUser: IUser, currentTweetIndex: number): void;
+}
+
+export interface IAddTweet {
+  (data: InputEditor): void;
+}
+
 export type ModalAuthType = 'login' | 'signup' | null;
 
 export type ModalGetUrlType = 'avatar' | 'cover' | null;
+
+export type ModalEditorType = 'new' | 'edit' | null;
 
 type InputAuth = {
   username: string;
@@ -71,6 +84,10 @@ type InputGetUrl = {
   url: string;
 };
 
-export type CustomFormInputs = InputAuth & InputGetUrl;
+type InputEditor = {
+  contentTextarea: string;
+};
+
+export type CustomFormInputs = InputAuth & InputGetUrl & InputEditor;
 
 export type InputName = keyof CustomFormInputs;

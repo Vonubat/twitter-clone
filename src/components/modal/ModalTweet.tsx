@@ -3,6 +3,7 @@ import Modal from 'react-overlays/cjs/Modal';
 import defaultAvatar from '../../assets/default_avatar.png';
 import closeBtn from '../../assets/icons/close.png';
 import { useTwitter } from '../../hooks';
+import { getTimeForTweetModal } from '../../utils';
 import { Button } from '../ui/Button';
 import { FanAvatars } from '../ui/FansAvatars';
 
@@ -59,13 +60,7 @@ export const ModalTweet = (): JSX.Element => {
         </div>
         <div className="modal__date-info mt-5">
           <span className="whitespace-nowrap text-black opacity-50">
-            {`${tweets[currentTweetIndex]?.date.getHours() || '00'}:${
-              tweets[currentTweetIndex]?.date.getMinutes() || '00'
-            } - ${tweets[currentTweetIndex]?.date.getDate() || '1'} ${
-              tweets[currentTweetIndex]?.date.toLocaleString('en-US', {
-                month: 'short',
-              }) || 'Jan'
-            }. ${tweets[currentTweetIndex]?.date.getFullYear() || '2000'}`}
+            {getTimeForTweetModal(tweets, currentTweetIndex)}
           </span>
         </div>
         <div className="modal__like-info mt-5 flex gap-3 border-t border-b p-2">

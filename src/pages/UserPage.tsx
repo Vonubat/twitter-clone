@@ -27,7 +27,7 @@ export const UserPage = (): JSX.Element => {
         </div>
         <div className="tweets__container flex flex-col gap-px max-w-lg p-2 md:p-0 ml-0 lg:ml-[10%]">
           {user.tweets.map(({ tweetId }, index) => (
-            <Tweet key={tweetId} user={user} index={index} />
+            <Tweet key={tweetId} user={user} currentTweetIndex={index} />
           ))}
         </div>
         <div className="banner__container hidden xl:block">{!ownerId && <Banner />}</div>

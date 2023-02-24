@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 
 import { AUTH_KEY, DB_KEY, ValidationMsg } from '../constants';
 import dbJSON from '../db/db.json';
-import { ILogIn, ILogOut, ISignUp, ITweet, ITwitterContext, IUser, ModalAuthType } from '../types';
+import { ILogIn, ILogOut, ISignUp, ITwitterContext, IUser, ModalAuthType } from '../types';
 import { reviver } from '../utils';
 
 import { useStateWithLocalStorage } from './useStateWithLocalStorage';
@@ -88,28 +88,31 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
   );
 
   const likeTweet = useCallback(
-    (tweetId: string, username: string) => {
+    (currentUser: IUser, currentTweetIndex: number) => {
       const updatedUsers = users.map((user) => {
-        if (user.username === username) {
-          try {
-            const { tweets } = user;
-            const targetTweet = tweets.find(({ tweetId: ref }) => tweetId === ref) as ITweet;
-            const tweetsWithoutTargetTweet = tweets.filter(({ tweetId: ref }) => tweetId !== ref);
+        if (user.username === currentUser.username) {
+          const { tweets } = user;
 
-            const ownerLike = targetTweet.likes.find(({ userId }) => userId === ownerId);
-            const updatedLikes = ownerLike
-              ? targetTweet.likes.filter(({ userId }) => userId !== ownerId)
-              : [...targetTweet.likes, { userId: ownerId as string }];
+          const ownerLikeIndex = tweets[currentTweetIndex].likes.findIndex(({ userId }) => userId === ownerId);
 
-            const targetTweetWithUpdatedLikes = { ...targetTweet, likes: [...updatedLikes] };
+          const updatedLikes =
+            ownerLikeIndex === -1
+              ? tweets[currentTweetIndex].likes.concat({ userId: ownerId as string })
+              : tweets[currentTweetIndex].likes.filter(({ userId }) => userId !== ownerId);
 
-            const updatedTweets = [...tweetsWithoutTargetTweet, targetTweetWithUpdatedLikes];
+          const updatedTweets = tweets.map((tweet, index) => {
+            if (index === currentTweetIndex) {
+              const updatedTweet = { ...tweet };
 
-            return { ...user, tweets: updatedTweets };
-          } catch (e) {
-            console.error(e);
-            console.error("Error in the method likeTweet of useTwitter hook (wasn't found tweet with such tweetId)");
-          }
+              updatedTweet.likes = updatedLikes;
+
+              return updatedTweet;
+            }
+
+            return tweet;
+          });
+
+          return { ...user, tweets: updatedTweets };
         }
 
         return user;

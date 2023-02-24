@@ -33,6 +33,7 @@ export interface ITwitterContext {
   signUp: ISignUp;
   showAuthModal: ModalAuthType;
   setShowAuthModal: Dispatch<React.SetStateAction<ModalAuthType>>;
+  likeTweet: (tweetId: string, username: string) => void;
 }
 
 export interface ILogIn {

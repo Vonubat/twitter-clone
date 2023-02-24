@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 
 import { AUTH_KEY, DB_KEY, ValidationMsg } from '../constants';
 import dbJSON from '../db/db.json';
-import { ILogIn, ILogOut, ISignUp, ITwitterContext, IUser, ModalAuthType } from '../types';
+import { ILogIn, ILogOut, ISignUp, ITweet, ITwitterContext, IUser, ModalAuthType } from '../types';
 import { reviver } from '../utils';
 
 import { useStateWithLocalStorage } from './useStateWithLocalStorage';
@@ -87,6 +87,39 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     [navigate, setOwnerId, setUsers, users],
   );
 
+  const likeTweet = useCallback(
+    (tweetId: string, username: string) => {
+      const updatedUsers = users.map((user) => {
+        if (user.username === username) {
+          try {
+            const { tweets } = user;
+            const targetTweet = tweets.find(({ tweetId: ref }) => tweetId === ref) as ITweet;
+            const tweetsWithoutTargetTweet = tweets.filter(({ tweetId: ref }) => tweetId !== ref);
+
+            const ownerLike = targetTweet.likes.find(({ userId }) => userId === ownerId);
+            const updatedLikes = ownerLike
+              ? targetTweet.likes.filter(({ userId }) => userId !== ownerId)
+              : [...targetTweet.likes, { userId: ownerId as string }];
+
+            const targetTweetWithUpdatedLikes = { ...targetTweet, likes: [...updatedLikes] };
+
+            const updatedTweets = [...tweetsWithoutTargetTweet, targetTweetWithUpdatedLikes];
+
+            return { ...user, tweets: updatedTweets };
+          } catch (e) {
+            console.error(e);
+            console.error("Error in the method likeTweet of useTwitter hook (wasn't found tweet with such tweetId)");
+          }
+        }
+
+        return user;
+      });
+
+      setUsers(updatedUsers);
+    },
+    [ownerId, setUsers, users],
+  );
+
   const providerValue: ITwitterContext = useMemo(
     () => ({
       users,
@@ -96,8 +129,9 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       signUp,
       showAuthModal,
       setShowAuthModal,
+      likeTweet,
     }),
-    [users, ownerId, logIn, logOut, signUp, showAuthModal, setShowAuthModal],
+    [users, ownerId, logIn, logOut, signUp, showAuthModal, setShowAuthModal, likeTweet],
   );
 
   return <TwitterContext.Provider value={providerValue}>{children}</TwitterContext.Provider>;

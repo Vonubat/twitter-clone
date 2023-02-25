@@ -1,4 +1,4 @@
-import { Dispatch } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 import { ValidationMsg } from '../constants';
 
@@ -11,6 +11,11 @@ export interface ITweet {
   text: string;
   likes: ILike[];
   date: Date;
+}
+
+export interface ICurrentTweetInfo {
+  currentUser: IUser;
+  currentTweetIndex: number;
 }
 
 export interface IUser {
@@ -34,8 +39,11 @@ export interface ITwitterContext {
   changeImg: IChangeImg;
   likeTweet: ILikeTweet;
   addTweet: IAddTweet;
+  editTweet: IEditTweet;
   showModalForm: ModalForm;
-  setShowModalForm: Dispatch<React.SetStateAction<ModalForm>>;
+  setShowModalForm: Dispatch<SetStateAction<ModalForm>>;
+  showModalTweet: ModalTweet;
+  setShowModalTweet: Dispatch<SetStateAction<ModalTweet>>;
 }
 
 export interface ILogIn {
@@ -55,14 +63,27 @@ export interface IChangeImg {
 }
 
 export interface ILikeTweet {
-  (currentUser: IUser, currentTweetIndex: number): void;
+  (data: ICurrentTweetInfo): void;
 }
 
 export interface IAddTweet {
   (data: InputEditor): void;
 }
 
-export type ModalForm = 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' | 'editTweet' | null;
+export interface IEditTweet {
+  (data: InputEditor & { tweetId: ITweet['tweetId'] }): void;
+}
+
+export type ModalForm =
+  | 'login'
+  | 'signup'
+  | 'avatar'
+  | 'cover'
+  | 'newTweet'
+  | { modalFormType: 'editTweet'; text: string; tweetId: ITweet['tweetId'] }
+  | null;
+
+export type ModalTweet = ICurrentTweetInfo | null;
 
 type InputAuth = {
   username: string;

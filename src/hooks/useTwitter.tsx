@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { Context, createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 
@@ -7,6 +7,7 @@ import dbJSON from '../db/db.json';
 import {
   IAddTweet,
   IChangeImg,
+  IEditTweet,
   ILikeTweet,
   ILogIn,
   ILogOut,
@@ -14,12 +15,13 @@ import {
   ITwitterContext,
   IUser,
   ModalForm,
+  ModalTweet,
 } from '../types';
 import { reviver } from '../utils';
 
 import { useStateWithLocalStorage } from './useStateWithLocalStorage';
 
-const TwitterContext: React.Context<ITwitterContext | null> = createContext<ITwitterContext | null>(null);
+const TwitterContext: Context<ITwitterContext | null> = createContext<ITwitterContext | null>(null);
 
 interface Props {
   children: React.ReactNode;
@@ -38,6 +40,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     ownerIdLS ? JSON.parse(ownerIdLS) : null,
   );
   const [showModalForm, setShowModalForm] = useState<ModalForm>(null);
+  const [showModalTweet, setShowModalTweet] = useState<ModalTweet>(null);
 
   const logIn: ILogIn = useCallback(
     ({ username, password }) => {
@@ -118,7 +121,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
   );
 
   const likeTweet: ILikeTweet = useCallback(
-    (currentUser, currentTweetIndex) => {
+    ({ currentUser, currentTweetIndex }) => {
       const updatedUsers = users.map((user) => {
         if (user.username === currentUser.username) {
           const { tweets } = user;
@@ -181,6 +184,35 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     [ownerId, setUsers, users],
   );
 
+  const editTweet: IEditTweet = useCallback(
+    ({ contentTextarea, tweetId }) => {
+      const updatedUsers = users.map((user) => {
+        if (user.id === ownerId) {
+          const { tweets } = user;
+
+          const updatedTweets = tweets.map((tweet) => {
+            if (tweet.tweetId === tweetId) {
+              const editedTweet = { ...tweet };
+
+              editedTweet.text = contentTextarea;
+
+              return editedTweet;
+            }
+
+            return tweet;
+          });
+
+          return { ...user, tweets: updatedTweets };
+        }
+
+        return user;
+      });
+
+      setUsers(updatedUsers);
+    },
+    [ownerId, setUsers, users],
+  );
+
   const providerValue: ITwitterContext = useMemo(
     () => ({
       users,
@@ -191,10 +223,27 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       changeImg,
       likeTweet,
       addTweet,
+      editTweet,
       showModalForm,
       setShowModalForm,
+      showModalTweet,
+      setShowModalTweet,
     }),
-    [users, ownerId, logIn, logOut, signUp, changeImg, likeTweet, addTweet, showModalForm, setShowModalForm],
+    [
+      users,
+      ownerId,
+      logIn,
+      logOut,
+      signUp,
+      changeImg,
+      likeTweet,
+      addTweet,
+      editTweet,
+      showModalForm,
+      setShowModalForm,
+      showModalTweet,
+      setShowModalTweet,
+    ],
   );
 
   return <TwitterContext.Provider value={providerValue}>{children}</TwitterContext.Provider>;

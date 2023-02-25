@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 
 import { ModalForm } from '../modal/ModalForm';
+import { ModalTweet } from '../modal/ModalTweet';
 
 import { Header } from './Header';
 
@@ -10,6 +11,7 @@ export const Layout = (): JSX.Element => {
       <Header />
       <Outlet />
       <ModalForm />
+      <ModalTweet />
     </>
   );
 };

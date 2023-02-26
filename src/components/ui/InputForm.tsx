@@ -18,7 +18,6 @@ type Ref = HTMLInputElement & HTMLTextAreaElement;
 type RefProps = {
   className: string;
   type: string;
-  autoFocus?: boolean;
   placeholder?: string;
 } & ReturnType<UseFormRegister<CustomFormInputs>>;
 
@@ -40,6 +39,9 @@ export const InputForm = ({ form, name, type, placeholder }: Props): JSX.Element
           minLength: {
             value: 3,
             message: ValidationMsg.empty,
+          },
+          validate: (value) => {
+            return !!value.trim() || ValidationMsg.notOnlySpaces;
           },
           ...(name !== 'location' &&
             name !== 'contentTextarea' && {

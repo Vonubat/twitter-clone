@@ -1,6 +1,7 @@
 import calendarIcon from '../../assets/icons/calendar.png';
 import locationIcon from '../../assets/icons/location.png';
 import { IUser } from '../../types';
+import { getTimeForUserInfo } from '../../utils';
 
 type Props = {
   user: IUser;
@@ -14,9 +15,7 @@ export const UserInfo = ({ user }: Props): JSX.Element => {
 
       <div className="mt-7 flex items-center gap-3">
         <img src={calendarIcon} alt="calendar icon" />
-        <span className="font-medium text-black opacity-50">{`Since ${user.joined.toLocaleString('en-US', {
-          month: 'long',
-        })} ${user.joined.getFullYear()}`}</span>
+        <span className="font-medium text-black opacity-50">{getTimeForUserInfo(user)}</span>
       </div>
       <div className="mt-3 flex items-center gap-3">
         <img src={locationIcon} alt="location icon" />

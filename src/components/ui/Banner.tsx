@@ -7,7 +7,7 @@ export const Banner = (): JSX.Element => {
   const { setShowModalForm } = useTwitter();
 
   const handleSignUp = (): void => {
-    setShowModalForm('signup');
+    setShowModalForm({ type: 'signup' });
   };
 
   return (

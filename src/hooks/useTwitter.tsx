@@ -102,7 +102,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
 
   const changeImg: IChangeImg = useCallback(
     ({ url }) => {
-      const key = showModalForm === 'cover' ? 'bgImage' : 'avatar';
+      const key = showModalForm?.type === 'cover' ? 'bgImage' : 'avatar';
       const updatedUsers = users.map((user) => {
         if (user.id === ownerId) {
           const updatedUser = { ...user };
@@ -161,8 +161,6 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       const updatedUsers = users.map((user) => {
         if (user.id === ownerId) {
           const { tweets } = user;
-
-          tweets.reverse();
           const newTweet = {
             tweetId: nanoid(),
             text: contentTextarea,
@@ -170,6 +168,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
             date: new Date(),
           };
 
+          tweets.reverse();
           tweets.push(newTweet);
           tweets.reverse();
 

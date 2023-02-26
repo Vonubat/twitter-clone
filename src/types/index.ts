@@ -75,12 +75,8 @@ export interface IEditTweet {
 }
 
 export type ModalForm =
-  | 'login'
-  | 'signup'
-  | 'avatar'
-  | 'cover'
-  | 'newTweet'
-  | { modalFormType: 'editTweet'; text: string; tweetId: ITweet['tweetId'] }
+  | { type: 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' }
+  | { type: 'editTweet'; text: string; tweetId: ITweet['tweetId'] }
   | null;
 
 export type ModalTweet = ICurrentTweetInfo | null;

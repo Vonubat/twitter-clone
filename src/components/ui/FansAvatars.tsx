@@ -14,7 +14,12 @@ export const FanAvatars = ({ likes = [] }: Props): JSX.Element => {
   return (
     <>
       {fans.map((fan) => (
-        <img key={fan.id} className="h-5 w-5 shrink-0 rounded-full" src={fan.avatar || defaultAvatar} alt="Avatar" />
+        <img
+          key={fan.id}
+          className="h-5 w-5 shrink-0 rounded-full object-cover"
+          src={fan.avatar || defaultAvatar}
+          alt="Avatar"
+        />
       ))}
     </>
   );

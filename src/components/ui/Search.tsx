@@ -68,7 +68,11 @@ export const Search = (): JSX.Element => {
                 <NavLink key={user.id} to={`/${user.username}`}>
                   <div className="my-2 flex cursor-pointer items-center  rounded-md px-2 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-400">
                     <div className="flex-grow px-2 font-medium">{`${user.firstName} ${user.lastName} (@${user.username})`}</div>
-                    <img className="h-10 w-10 rounded-full" src={user.avatar || defaultAvatar} alt="Rounded avatar" />
+                    <img
+                      className="h-10 w-10 rounded-full object-cover"
+                      src={user.avatar || defaultAvatar}
+                      alt="Rounded avatar"
+                    />
                   </div>
                 </NavLink>
               );

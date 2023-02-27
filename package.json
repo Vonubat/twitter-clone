@@ -1,7 +1,7 @@
 {
-  "name": "twitter-clone-reactjs",
+  "name": "twitter-clone",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.5.0",
   "description": "Twitter Clone written in React.js",
   "type": "module",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Vonubat/twitter-clone-reactjs.git"
+    "url": "git+https://github.com/Vonubat/twitter-clone.git"
   },
   "author": "Vonubat <vonubat@gmail.com>",
   "keywords": [
@@ -22,9 +22,9 @@
   ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Vonubat/twitter-clone-reactjs/issues"
+    "url": "https://github.com/Vonubat/twitter-clone/issues"
   },
-  "homepage": "https://github.com/Vonubat/twitter-clone-reactjs#readme",
+  "homepage": "https://github.com/Vonubat/twitter-clone#readme",
   "dependencies": {
     "nanoid": "^4.0.1",
     "react": "^18.2.0",

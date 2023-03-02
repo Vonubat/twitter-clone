@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { ValidationMsg } from '../constants';
 
 export interface ILike {
@@ -40,10 +38,6 @@ export interface ITwitterContext {
   likeTweet: ILikeTweet;
   addTweet: IAddTweet;
   editTweet: IEditTweet;
-  showModalForm: ModalForm;
-  setShowModalForm: Dispatch<SetStateAction<ModalForm>>;
-  showModalTweet: ModalTweet;
-  setShowModalTweet: Dispatch<SetStateAction<ModalTweet>>;
 }
 
 export interface ILogIn {

@@ -1,9 +1,10 @@
-import { Context, createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { Context, createContext, useCallback, useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 
 import { AUTH_KEY, DB_KEY, ValidationMsg } from '../constants';
 import dbJSON from '../db/db.json';
+import { modalSelector, useAppSelector } from '../store';
 import {
   IAddTweet,
   IChangeImg,
@@ -14,8 +15,6 @@ import {
   ISignUp,
   ITwitterContext,
   IUser,
-  ModalForm,
-  ModalTweet,
 } from '../types';
 import { reviver } from '../utils';
 
@@ -28,6 +27,7 @@ interface Props {
 }
 
 export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ children }: Props): JSX.Element => {
+  const { modalForm } = useAppSelector(modalSelector);
   const navigate = useNavigate();
   const dbLS: string | null = localStorage.getItem(DB_KEY);
   const [users, setUsers] = useStateWithLocalStorage<IUser[]>(
@@ -39,8 +39,6 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
     AUTH_KEY,
     ownerIdLS ? JSON.parse(ownerIdLS) : null,
   );
-  const [showModalForm, setShowModalForm] = useState<ModalForm>(null);
-  const [showModalTweet, setShowModalTweet] = useState<ModalTweet>(null);
 
   const logIn: ILogIn = useCallback(
     ({ username, password }) => {
@@ -102,7 +100,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
 
   const changeImg: IChangeImg = useCallback(
     ({ url }) => {
-      const key = showModalForm?.type === 'cover' ? 'bgImage' : 'avatar';
+      const key = modalForm?.type === 'cover' ? 'bgImage' : 'avatar';
       const updatedUsers = users.map((user) => {
         if (user.id === ownerId) {
           const updatedUser = { ...user };
@@ -117,7 +115,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
 
       setUsers(updatedUsers);
     },
-    [ownerId, setUsers, showModalForm, users],
+    [ownerId, setUsers, modalForm, users],
   );
 
   const likeTweet: ILikeTweet = useCallback(
@@ -223,26 +221,8 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       likeTweet,
       addTweet,
       editTweet,
-      showModalForm,
-      setShowModalForm,
-      showModalTweet,
-      setShowModalTweet,
     }),
-    [
-      users,
-      ownerId,
-      logIn,
-      logOut,
-      signUp,
-      changeImg,
-      likeTweet,
-      addTweet,
-      editTweet,
-      showModalForm,
-      setShowModalForm,
-      showModalTweet,
-      setShowModalTweet,
-    ],
+    [users, ownerId, logIn, logOut, signUp, changeImg, likeTweet, addTweet, editTweet],
   );
 
   return <TwitterContext.Provider value={providerValue}>{children}</TwitterContext.Provider>;

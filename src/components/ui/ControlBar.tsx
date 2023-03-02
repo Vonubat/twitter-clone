@@ -1,4 +1,5 @@
 import { useTwitter } from '../../hooks';
+import { setModalForm, useAppDispatch } from '../../store';
 import { IUser } from '../../types';
 
 type Props = {
@@ -6,7 +7,8 @@ type Props = {
 };
 
 export const ControlBar = ({ user }: Props): JSX.Element => {
-  const { ownerId, setShowModalForm } = useTwitter();
+  const { ownerId } = useTwitter();
+  const dispatch = useAppDispatch();
 
   return (
     <div className="flex h-[50px] w-full items-center bg-white">
@@ -18,7 +20,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
         {ownerId === user.id && (
           <button
             className="tweets-btn__add w-full min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
-            onClick={() => setShowModalForm({ type: 'newTweet' })}
+            onClick={() => dispatch(setModalForm({ type: 'newTweet' }))}
           >
             Add new Tweet
           </button>
@@ -26,7 +28,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
         {ownerId === user.id && (
           <button
             className="tweets-btn__change-avatar min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
-            onClick={() => setShowModalForm({ type: 'avatar' })}
+            onClick={() => dispatch(setModalForm({ type: 'avatar' }))}
           >
             Change Avatar
           </button>
@@ -34,7 +36,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
         {ownerId === user.id && (
           <button
             className="tweets-btn__change-cover min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
-            onClick={() => setShowModalForm({ type: 'cover' })}
+            onClick={() => dispatch(setModalForm({ type: 'cover' }))}
           >
             Change Cover
           </button>

@@ -3,6 +3,7 @@ import Modal from 'react-overlays/cjs/Modal';
 import defaultAvatar from '../../assets/default_avatar.png';
 import closeBtn from '../../assets/icons/close.png';
 import { useTwitter } from '../../hooks';
+import { modalSelector, setModalForm, setModalTweet, useAppDispatch, useAppSelector } from '../../store';
 import { getTimeForTweetModal } from '../../utils';
 import { Button } from '../ui/Button';
 import { FanAvatars } from '../ui/FansAvatars';
@@ -10,34 +11,34 @@ import { FanAvatars } from '../ui/FansAvatars';
 import { Backdrop } from './Backdrop';
 
 export const ModalTweet = (): JSX.Element => {
-  const { showModalTweet, setShowModalTweet, setShowModalForm, ownerId } = useTwitter();
+  const { ownerId } = useTwitter();
+  const { modalTweet } = useAppSelector(modalSelector);
+  const dispatch = useAppDispatch();
 
-  const { currentTweetIndex = 0 } = showModalTweet || {};
+  const { currentTweetIndex = 0 } = modalTweet || {};
 
-  const {
-    id: userId = '',
-    firstName = '',
-    lastName = '',
-    username = '',
-    tweets = [],
-  } = showModalTweet?.currentUser || {};
+  const { id: userId = '', firstName = '', lastName = '', username = '', tweets = [] } = modalTweet?.currentUser || {};
 
-  const handleClose = (): void => setShowModalTweet(null);
+  const handleClose = (): void => {
+    dispatch(setModalTweet(null));
+  };
 
   const handleEditTweet = (): void => {
-    setShowModalTweet(null);
-    setShowModalForm({
-      type: 'editTweet',
-      text: tweets[currentTweetIndex].text,
-      tweetId: tweets[currentTweetIndex].tweetId,
-    });
+    dispatch(setModalTweet(null));
+    dispatch(
+      setModalForm({
+        type: 'editTweet',
+        text: tweets[currentTweetIndex].text,
+        tweetId: tweets[currentTweetIndex].tweetId,
+      }),
+    );
   };
 
   return (
     <Modal
       className={`modal fixed top-1/2 left-1/2 z-50 flex
       max-h-[85vh] w-[80vw] max-w-[600px] -translate-y-1/2 -translate-x-1/2 flex-col rounded-md bg-white p-7 shadow-md outline-none`}
-      show={!!showModalTweet}
+      show={!!modalTweet}
       onHide={handleClose}
       renderBackdrop={Backdrop}
     >
@@ -46,7 +47,7 @@ export const ModalTweet = (): JSX.Element => {
           <div className="modal__title flex gap-5">
             <img
               className="h-12 w-12 shrink-0 rounded-full"
-              src={showModalTweet?.currentUser.avatar || defaultAvatar}
+              src={modalTweet?.currentUser.avatar || defaultAvatar}
               alt="Avatar"
             />
             <div className="flex flex-col">

@@ -3,17 +3,19 @@ import { NavLink } from 'react-router-dom';
 import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
 import { Path } from '../../constants';
 import { useTwitter } from '../../hooks';
+import { setModalForm, useAppDispatch } from '../../store';
 import { Button } from '../ui/Button';
 
 export const Header = (): JSX.Element => {
-  const { ownerId, setShowModalForm, logOut } = useTwitter();
+  const { ownerId, logOut } = useTwitter();
+  const dispatch = useAppDispatch();
 
   const handleLogIn = (): void => {
-    setShowModalForm({ type: 'login' });
+    dispatch(setModalForm({ type: 'login' }));
   };
 
   const handleSignUp = (): void => {
-    setShowModalForm({ type: 'signup' });
+    dispatch(setModalForm({ type: 'signup' }));
   };
 
   const handleLogOut = (): void => {

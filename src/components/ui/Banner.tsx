@@ -1,13 +1,13 @@
 import bannerBird from '../../assets/banner_bird.png';
-import { useTwitter } from '../../hooks';
+import { setModalForm, useAppDispatch } from '../../store';
 
 import { Button } from './Button';
 
 export const Banner = (): JSX.Element => {
-  const { setShowModalForm } = useTwitter();
+  const dispatch = useAppDispatch();
 
   const handleSignUp = (): void => {
-    setShowModalForm({ type: 'signup' });
+    dispatch(setModalForm({ type: 'signup' }));
   };
 
   return (

@@ -2,16 +2,18 @@ import { MouseEvent } from 'react';
 
 import { ReactComponent as Like } from '../../assets/icons/like.svg';
 import { useTwitter } from '../../hooks';
+import { setModalForm, useAppDispatch } from '../../store';
 import { ICurrentTweetInfo, ILike } from '../../types';
 
 type Props = ICurrentTweetInfo;
 
 export const LikeBtn = ({ currentUser, currentTweetIndex }: Props): JSX.Element => {
-  const { setShowModalForm, likeTweet, ownerId } = useTwitter();
+  const { likeTweet, ownerId } = useTwitter();
+  const dispatch = useAppDispatch();
 
   const handleAnonymousClickToLike = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setShowModalForm({ type: 'signup' });
+    dispatch(setModalForm({ type: 'signup' }));
   };
 
   const handleSignedClickToLike = (e: MouseEvent<HTMLButtonElement>) => {

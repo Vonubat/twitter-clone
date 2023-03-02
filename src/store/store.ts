@@ -8,13 +8,14 @@ export const store = configureStore({
     modalStore: modalReducer,
   },
 
+  // temporary suppressing "A non-serializable value was detected in the state" error
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ['scheduler/setDateTime'],
+        ignoredActions: ['modal/setModalTweet'],
         // Ignore these paths in the state
-        ignoredPaths: ['schedulerStore.dt'],
+        ignoredPaths: ['modalStore.modalTweet'],
       },
     }),
 });

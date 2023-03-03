@@ -1,31 +1,34 @@
 import { ValidationMsg } from '../constants';
 
-export interface ILike {
-  userId: string;
-}
-
-export interface ITweet {
-  tweetId: string;
-  text: string;
-  likes: ILike[];
-  date: Date;
-}
-
-export interface ICurrentTweetInfo {
-  currentUser: IUser;
-  currentTweetIndex: number;
-}
-
 export interface IUser {
-  id: string;
+  userId: string;
   avatar: string | null;
   bgImage: string | null;
   username: string;
   firstName: string;
   lastName: string;
   location: string;
-  joined: Date;
+  joined: string;
   tweets: ITweet[];
+  likes: ILike[];
+}
+
+export interface ILike {
+  likeId: string;
+  user?: IUser;
+  tweet?: ITweet;
+}
+
+export interface ITweet {
+  tweetId: string;
+  text: string;
+  date: string;
+  user?: IUser;
+}
+
+export interface ICurrentTweetInfo {
+  currentUser: IUser;
+  currentTweetIndex: number;
 }
 
 export interface ITwitterContext {
@@ -94,3 +97,8 @@ type InputEditor = {
 export type CustomFormInputs = InputAuth & InputGetUrl & InputEditor;
 
 export type InputName = keyof CustomFormInputs;
+
+export interface IGenericResponse {
+  status: string;
+  message: string;
+}

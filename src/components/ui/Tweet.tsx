@@ -1,5 +1,5 @@
 import defaultAvatar from '../../assets/default_avatar.png';
-import { setModalTweet, useAppDispatch } from '../../store';
+import { setModalTweet, useAppDispatch } from '../../redux';
 import { IUser } from '../../types';
 import { getTimeForTweet } from '../../utils';
 

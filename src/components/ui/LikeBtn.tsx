@@ -2,8 +2,8 @@ import { MouseEvent } from 'react';
 
 import { ReactComponent as Like } from '../../assets/icons/like.svg';
 import { useTwitter } from '../../hooks';
-import { setModalForm, useAppDispatch } from '../../store';
-import { ICurrentTweetInfo, ILike } from '../../types';
+import { setModalForm, useAppDispatch } from '../../redux';
+import { ICurrentTweetInfo } from '../../types';
 
 type Props = ICurrentTweetInfo;
 
@@ -26,13 +26,11 @@ export const LikeBtn = ({ currentUser, currentTweetIndex }: Props): JSX.Element 
       return false;
     }
 
-    const ownerLike: ILike | undefined = currentUser.tweets[currentTweetIndex].likes.find(
-      ({ userId }) => userId === ownerId,
-    );
+    // const ownerLike: ILike | undefined = currentUser.likes.find((like) => userId === ownerId);
 
-    if (!ownerLike) {
-      return false;
-    }
+    // if (!ownerLike) {
+    //   return false;
+    // }
 
     return true;
   };
@@ -43,7 +41,7 @@ export const LikeBtn = ({ currentUser, currentTweetIndex }: Props): JSX.Element 
       onClick={ownerId ? handleSignedClickToLike : handleAnonymousClickToLike}
     >
       <Like className={`${checkIsOwnerLikePresent() ? 'fill-red-700' : 'fill-none'}`} />
-      <span className="select-none text-black opacity-50">{currentUser.tweets[currentTweetIndex].likes.length}</span>
+      <span className="select-none text-black opacity-50">{currentUser.likes.length}</span>
     </button>
   );
 };

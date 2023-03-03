@@ -5,7 +5,7 @@ import Modal from 'react-overlays/cjs/Modal';
 import closeBtn from '../../assets/icons/close.png';
 import { ValidationMsg } from '../../constants';
 import { useTwitter } from '../../hooks';
-import { modalSelector, setModalForm, useAppDispatch, useAppSelector } from '../../store';
+import { modalSelector, setModalForm, useAppDispatch, useAppSelector } from '../../redux';
 import { CustomFormInputs } from '../../types';
 import { Button } from '../ui/Button';
 import { InputForm } from '../ui/InputForm';

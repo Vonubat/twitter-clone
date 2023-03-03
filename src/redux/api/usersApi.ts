@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { BASE_URL } from '../../constants';
 import { IUser } from '../../types';
+import { setCurrentUser } from '../slices/userSlice';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -18,6 +19,16 @@ export const usersApi = createApi({
         return {
           url: username,
         };
+      },
+      // transformResponse: (result: { data: { user: IUser } }) => result.data.user,
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+
+          dispatch(setCurrentUser(data));
+        } catch (e) {
+          console.error(e);
+        }
       },
     }),
   }),

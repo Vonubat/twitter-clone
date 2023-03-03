@@ -1,34 +1,34 @@
 import defaultAvatar from '../../assets/default_avatar.png';
-import { setModalTweet, useAppDispatch } from '../../redux';
-import { IUser } from '../../types';
+import { setModalTweet, useAppDispatch, useAppSelector, userSelector } from '../../redux';
+import { ITweet } from '../../types';
 import { getTimeForTweet } from '../../utils';
 
 import { LikeBtn } from './LikeBtn';
 
 type Props = {
-  user: IUser;
-  currentTweetIndex: number;
+  tweet: ITweet;
 };
 
-export const Tweet = ({ user, currentTweetIndex }: Props): JSX.Element => {
+export const Tweet = ({ tweet }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
+  const { currentUser: user } = useAppSelector(userSelector);
 
   const handleTweetClick = () => {
-    dispatch(setModalTweet({ currentUser: user, currentTweetIndex }));
+    dispatch(setModalTweet(tweet));
   };
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div role="button" tabIndex={0} className="tweet flex gap-5 bg-white p-3 outline-none" onClick={handleTweetClick}>
-      <img className="h-12 w-12 shrink-0 rounded-full object-cover" src={user.avatar || defaultAvatar} alt="Avatar" />
+      <img className="h-12 w-12 shrink-0 rounded-full object-cover" src={user?.avatar || defaultAvatar} alt="Avatar" />
       <article className="tweet-content flex flex-col">
         <div className="tweet-content__info flex items-center gap-2">
-          <h3 className="text-lg font-semibold text-black">{`${user.firstName} ${user.lastName}`}</h3>
-          <span className="text-black opacity-50">{`@${user.username}`}</span>
-          <span className="whitespace-nowrap text-black opacity-50">{getTimeForTweet(user, currentTweetIndex)}</span>
+          <h3 className="text-lg font-semibold text-black">{`${user?.firstName} ${user?.lastName}`}</h3>
+          <span className="text-black opacity-50">{`@${user?.username}`}</span>
+          <span className="whitespace-nowrap text-black opacity-50">{getTimeForTweet(tweet)}</span>
         </div>
-        <span className="tweet-content__content mt-1">{user.tweets[currentTweetIndex].text}</span>
-        <LikeBtn currentUser={user} currentTweetIndex={currentTweetIndex} />
+        <span className="tweet-content__content mt-1">{tweet.text}</span>
+        <LikeBtn tweet={tweet} />
       </article>
     </div>
   );

@@ -2,14 +2,20 @@ import { MouseEvent } from 'react';
 
 import { ReactComponent as Like } from '../../assets/icons/like.svg';
 import { useTwitter } from '../../hooks';
-import { setModalForm, useAppDispatch } from '../../redux';
-import { ICurrentTweetInfo } from '../../types';
+import { setModalForm, useAppDispatch, useGetLikesAndUsersOnCertainTweetQuery } from '../../redux';
+import { ITweet } from '../../types';
 
-type Props = ICurrentTweetInfo;
+import { Loading } from './indicators/Loading';
 
-export const LikeBtn = ({ currentUser, currentTweetIndex }: Props): JSX.Element => {
-  const { likeTweet, ownerId } = useTwitter();
+type Props = {
+  tweet: ITweet;
+};
+
+export const LikeBtn = ({ tweet }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
+  const { tweetId } = tweet;
+  const { data: likes, isLoading } = useGetLikesAndUsersOnCertainTweetQuery(tweetId);
+  const { likeTweet, ownerId } = useTwitter();
 
   const handleAnonymousClickToLike = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -18,7 +24,7 @@ export const LikeBtn = ({ currentUser, currentTweetIndex }: Props): JSX.Element 
 
   const handleSignedClickToLike = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    likeTweet({ currentUser, currentTweetIndex });
+    // likeTweet({ currentUser, currentTweetIndex });
   };
 
   const checkIsOwnerLikePresent = (): boolean => {
@@ -41,7 +47,10 @@ export const LikeBtn = ({ currentUser, currentTweetIndex }: Props): JSX.Element 
       onClick={ownerId ? handleSignedClickToLike : handleAnonymousClickToLike}
     >
       <Like className={`${checkIsOwnerLikePresent() ? 'fill-red-700' : 'fill-none'}`} />
-      <span className="select-none text-black opacity-50">{currentUser.likes.length}</span>
+      <span className="select-none text-black opacity-50">
+        {isLoading && <Loading type="content" />}
+        {likes && likes.length}
+      </span>
     </button>
   );
 };

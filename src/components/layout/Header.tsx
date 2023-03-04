@@ -2,13 +2,13 @@ import { NavLink } from 'react-router-dom';
 
 import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
 import { Path } from '../../constants';
-import { useTwitter } from '../../hooks';
-import { setModalForm, useAppDispatch } from '../../redux';
+import { setModalForm, useAppDispatch, useAppSelector, useLogoutUserMutation, userSelector } from '../../redux';
 import { Button } from '../ui/Button';
 
 export const Header = (): JSX.Element => {
-  const { ownerId, logOut } = useTwitter();
   const dispatch = useAppDispatch();
+  const { owner } = useAppSelector(userSelector);
+  const [logOut] = useLogoutUserMutation();
 
   const handleLogIn = (): void => {
     dispatch(setModalForm({ type: 'login' }));
@@ -32,7 +32,7 @@ export const Header = (): JSX.Element => {
       </NavLink>
       <div className="button__wrapper flex gap-3">
         <Button
-          externalStyle={ownerId ? 'invisible' : ' visible'}
+          externalStyle={owner ? 'invisible' : ' visible'}
           size="small"
           type="button"
           color="transparent"
@@ -40,8 +40,8 @@ export const Header = (): JSX.Element => {
         >
           Log In
         </Button>
-        <Button size="small" type="button" color="solid" onClick={ownerId ? handleLogOut : handleSignUp}>
-          {ownerId ? 'Log out' : 'Sign up'}
+        <Button size="small" type="button" color="solid" onClick={owner ? handleLogOut : handleSignUp}>
+          {owner ? 'Log out' : 'Sign up'}
         </Button>
       </div>
     </header>

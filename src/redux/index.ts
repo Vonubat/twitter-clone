@@ -1,3 +1,9 @@
+export {
+  useLoginUserMutation,
+  useLogoutUserMutation,
+  useRegisterUserMutation,
+  useVerifyUserQuery,
+} from './api/authApi';
 export { useGetLikesAndUsersOnCertainTweetQuery } from './api/likesApi';
 export { useGetListOfUserTweetsQuery } from './api/tweetsApi';
 export { useGetAllUsersQuery, useGetUserQuery } from './api/usersApi';

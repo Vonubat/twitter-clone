@@ -9,7 +9,7 @@ export enum TypingSvg {
 }
 
 export enum ValidationMsg {
-  cantFindUser = 'Cant find user with such username or password (username === password)',
+  wrongCredentials = 'Wrong credentials provided',
   userIsExist = 'User with such username is exist',
   empty = 'Field should contains at least 3 chars',
   noSpaces = `Spaces aren't allowed`,

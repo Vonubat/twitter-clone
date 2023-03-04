@@ -5,17 +5,18 @@ import Modal from 'react-overlays/cjs/Modal';
 import closeBtn from '../../assets/icons/close.png';
 import { ValidationMsg } from '../../constants';
 import { useTwitter } from '../../hooks';
-import { modalSelector, setModalForm, useAppDispatch, useAppSelector } from '../../redux';
-import { CustomFormInputs } from '../../types';
+import { modalSelector, setModalForm, useAppDispatch, useAppSelector, useLoginUserMutation } from '../../redux';
+import { CustomFormInputs, isFetchBaseQueryError, isGenericResponse } from '../../types';
 import { Button } from '../ui/Button';
 import { InputForm } from '../ui/InputForm';
 
 import { Backdrop } from './Backdrop';
 
 export const ModalForm = (): JSX.Element => {
-  const { logIn, signUp, changeImg, addTweet, editTweet } = useTwitter();
-  const { modalForm } = useAppSelector(modalSelector);
   const dispatch = useAppDispatch();
+  const { signUp, changeImg, addTweet, editTweet } = useTwitter();
+  const { modalForm } = useAppSelector(modalSelector);
+  const [logIn] = useLoginUserMutation();
 
   const form = useForm<CustomFormInputs>();
   const {
@@ -31,22 +32,27 @@ export const ModalForm = (): JSX.Element => {
     dispatch(setModalForm(null));
   };
 
-  const handleFormSubmit = (data: CustomFormInputs): void => {
+  const handleFormSubmit = async (data: CustomFormInputs): Promise<void> => {
     if (modalForm?.type === 'login') {
-      const res = logIn(data);
+      try {
+        await logIn(data).unwrap();
 
-      if (res === ValidationMsg.cantFindUser) {
-        setError('username', {
-          type: 'manual',
-          message: ValidationMsg.cantFindUser,
-        });
+        dispatch(setModalForm(null));
+      } catch (error) {
+        if (isFetchBaseQueryError(error) && isGenericResponse(error.data)) {
+          const { message: msg } = error.data;
 
-        setError('password', {
-          type: 'manual',
-          message: ValidationMsg.cantFindUser,
-        });
-
-        return;
+          if (msg === ValidationMsg.wrongCredentials) {
+            setError('username', {
+              type: 'manual',
+              message: ValidationMsg.wrongCredentials,
+            });
+            setError('password', {
+              type: 'manual',
+              message: ValidationMsg.wrongCredentials,
+            });
+          }
+        }
       }
     }
 
@@ -74,8 +80,6 @@ export const ModalForm = (): JSX.Element => {
     if (modalForm?.type === 'editTweet') {
       editTweet({ ...data, tweetId: modalForm.tweetId });
     }
-
-    dispatch(setModalForm(null));
   };
 
   useEffect((): void => {

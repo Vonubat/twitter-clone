@@ -1,6 +1,7 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 
+import { authApi } from './api/authApi';
 import { likesApi } from './api/likesApi';
 import { tweetsApi } from './api/tweetsApi';
 import { usersApi } from './api/usersApi';
@@ -11,6 +12,7 @@ export const store = configureStore({
   reducer: {
     modalStore: modalReducer,
     userStore: userReducer,
+    [authApi.reducerPath]: authApi.reducer,
     [usersApi.reducerPath]: usersApi.reducer,
     [tweetsApi.reducerPath]: tweetsApi.reducer,
     [likesApi.reducerPath]: likesApi.reducer,
@@ -25,7 +27,7 @@ export const store = configureStore({
         // Ignore these paths in the state
         ignoredPaths: ['modalStore.modalTweet'],
       },
-    }).concat([usersApi.middleware, tweetsApi.middleware, likesApi.middleware]),
+    }).concat([authApi.middleware, usersApi.middleware, tweetsApi.middleware, likesApi.middleware]),
 });
 
 type RootState = ReturnType<typeof store.getState>;

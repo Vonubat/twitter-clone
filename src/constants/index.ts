@@ -14,6 +14,8 @@ export enum ValidationMsg {
   noSpaces = `Spaces aren't allowed`,
   notOnlySpaces = `Your message can't consist of only spaces`,
   nonValidUrl = 'Non-valid URL-address',
+  unauthorized = 'Unauthorized',
+  sessionHasExpired = 'Session has expired. Please, authenticate yourself',
 }
 
 export enum Path {

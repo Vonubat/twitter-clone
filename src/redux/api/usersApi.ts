@@ -9,7 +9,8 @@ export const usersApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}/users`,
   }),
-  tagTypes: ['Users'],
+  refetchOnReconnect: true,
+  tagTypes: ['User'],
   endpoints: (builder) => ({
     getAllUsers: builder.query<Omit<IUser, 'tweets' | 'likes'>[], void>({
       query: () => '',

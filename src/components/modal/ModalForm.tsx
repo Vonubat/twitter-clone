@@ -1,11 +1,19 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Modal from 'react-overlays/cjs/Modal';
+import { useNavigate } from 'react-router-dom';
 
 import closeBtn from '../../assets/icons/close.png';
 import { ValidationMsg } from '../../constants';
 import { useTwitter } from '../../hooks';
-import { modalSelector, setModalForm, useAppDispatch, useAppSelector, useLoginUserMutation } from '../../redux';
+import {
+  modalSelector,
+  setModalForm,
+  useAppDispatch,
+  useAppSelector,
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} from '../../redux';
 import { CustomFormInputs, isFetchBaseQueryError, isGenericResponse } from '../../types';
 import { Button } from '../ui/Button';
 import { InputForm } from '../ui/InputForm';
@@ -14,9 +22,11 @@ import { Backdrop } from './Backdrop';
 
 export const ModalForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { signUp, changeImg, addTweet, editTweet } = useTwitter();
+  const navigate = useNavigate();
+  const { changeImg, addTweet, editTweet } = useTwitter();
   const { modalForm } = useAppSelector(modalSelector);
   const [logIn] = useLoginUserMutation();
+  const [signUp] = useRegisterUserMutation();
 
   const form = useForm<CustomFormInputs>();
   const {
@@ -35,9 +45,10 @@ export const ModalForm = (): JSX.Element => {
   const handleFormSubmit = async (data: CustomFormInputs): Promise<void> => {
     if (modalForm?.type === 'login') {
       try {
-        await logIn(data).unwrap();
+        const owner = await logIn(data).unwrap();
 
         dispatch(setModalForm(null));
+        navigate(owner.username);
       } catch (error) {
         if (isFetchBaseQueryError(error) && isGenericResponse(error.data)) {
           const { message: msg } = error.data;
@@ -57,15 +68,22 @@ export const ModalForm = (): JSX.Element => {
     }
 
     if (modalForm?.type === 'signup') {
-      const res = signUp(data);
+      try {
+        const owner = await signUp(data).unwrap();
 
-      if (res === ValidationMsg.userIsExist) {
-        setError('username', {
-          type: 'manual',
-          message: ValidationMsg.userIsExist,
-        });
+        dispatch(setModalForm(null));
+        navigate(owner.username);
+      } catch (error) {
+        if (isFetchBaseQueryError(error) && isGenericResponse(error.data)) {
+          const { error: msg } = error.data;
 
-        return;
+          if (msg === ValidationMsg.userIsExist) {
+            setError('username', {
+              type: 'manual',
+              message: ValidationMsg.userIsExist,
+            });
+          }
+        }
       }
     }
 

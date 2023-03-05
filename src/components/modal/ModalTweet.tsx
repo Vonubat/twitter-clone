@@ -3,7 +3,6 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 import defaultAvatar from '../../assets/default_avatar.png';
 import closeBtn from '../../assets/icons/close.png';
-import { useTwitter } from '../../hooks';
 import {
   modalSelector,
   setModalForm,
@@ -22,13 +21,12 @@ import { Backdrop } from './Backdrop';
 
 export const ModalTweet = (): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { ownerId } = useTwitter();
   const { modalTweet } = useAppSelector(modalSelector);
-  const { currentUser } = useAppSelector(userSelector);
-
+  const { currentUser, owner } = useAppSelector(userSelector);
   const { avatar, firstName, lastName, username, userId } = currentUser || {};
   const { tweetId, text } = modalTweet || {};
   const { data: likes, isLoading } = useGetLikesAndUsersOnCertainTweetQuery(tweetId ?? skipToken);
+  const isOwnerPage = userId === owner?.userId;
 
   const handleClose = (): void => {
     dispatch(setModalTweet(null));
@@ -78,7 +76,7 @@ export const ModalTweet = (): JSX.Element => {
           </div>
           <div className="avatar-container flex flex-wrap gap-3">{likes && <FanAvatars likes={likes} />}</div>
         </div>
-        {userId === ownerId && (
+        {isOwnerPage && (
           <Button externalStyle="mt-3 self-center" size="large" type="submit" color="solid" onClick={handleEditTweet}>
             Edit tweet
           </Button>

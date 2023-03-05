@@ -4,13 +4,15 @@ import { BASE_URL } from '../../constants';
 import { InputAuth, IUser } from '../../types';
 import { setCurrentUser, setOwner } from '../slices/userSlice';
 
+import { usersApi } from './usersApi';
+
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}/auth`,
     credentials: 'include',
   }),
-  tagTypes: ['Users'],
+  tagTypes: ['User'],
   endpoints: (builder) => ({
     registerUser: builder.mutation<IUser, InputAuth>({
       query(data) {
@@ -22,10 +24,15 @@ export const authApi = createApi({
       },
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
-          const { data } = await queryFulfilled;
+          const { data: newUser } = await queryFulfilled;
 
-          dispatch(setCurrentUser(data));
-          dispatch(setOwner(data));
+          dispatch(setCurrentUser(newUser));
+          dispatch(setOwner(newUser));
+          dispatch(
+            usersApi.util.updateQueryData('getAllUsers', undefined, (draft) => {
+              draft.push(newUser);
+            }),
+          );
         } catch (e) {
           console.error(e);
         }
@@ -66,7 +73,7 @@ export const authApi = createApi({
         }
       },
     }),
-    verifyUser: builder.query<IUser, void>({
+    verifyUser: builder.query<IUser, null>({
       query() {
         return {
           url: '',

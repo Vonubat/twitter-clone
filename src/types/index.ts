@@ -97,7 +97,8 @@ export type InputName = keyof CustomFormInputs;
 
 export interface IGenericResponse {
   statusCode?: string;
-  message: string;
+  message?: string;
+  error?: string;
 }
 
 export function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryError {
@@ -105,5 +106,5 @@ export function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryEr
 }
 
 export function isGenericResponse(data: unknown): data is IGenericResponse {
-  return typeof data === 'object' && data != null && 'message' in data;
+  return typeof data === 'object' && data != null && ('message' in data || 'error' in data);
 }

@@ -1,8 +1,13 @@
 import { MouseEvent } from 'react';
 
 import { ReactComponent as Like } from '../../assets/icons/like.svg';
-import { useTwitter } from '../../hooks';
-import { setModalForm, useAppDispatch, useGetLikesAndUsersOnCertainTweetQuery } from '../../redux';
+import {
+  setModalForm,
+  useAppDispatch,
+  useAppSelector,
+  useGetLikesAndUsersOnCertainTweetQuery,
+  userSelector,
+} from '../../redux';
 import { ITweet } from '../../types';
 
 import { Loading } from './indicators/Loading';
@@ -15,7 +20,7 @@ export const LikeBtn = ({ tweet }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const { tweetId } = tweet;
   const { data: likes, isLoading } = useGetLikesAndUsersOnCertainTweetQuery(tweetId);
-  const { likeTweet, ownerId } = useTwitter();
+  const { owner } = useAppSelector(userSelector);
 
   const handleAnonymousClickToLike = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -28,7 +33,7 @@ export const LikeBtn = ({ tweet }: Props): JSX.Element => {
   };
 
   const checkIsOwnerLikePresent = (): boolean => {
-    if (!ownerId) {
+    if (!owner) {
       return false;
     }
 
@@ -44,7 +49,7 @@ export const LikeBtn = ({ tweet }: Props): JSX.Element => {
   return (
     <button
       className="tweet-content__likes mt-2 flex w-10 items-center gap-2 rounded-md p-1 hover:bg-sky-50"
-      onClick={ownerId ? handleSignedClickToLike : handleAnonymousClickToLike}
+      onClick={owner ? handleSignedClickToLike : handleAnonymousClickToLike}
     >
       <Like className={`${checkIsOwnerLikePresent() ? 'fill-red-700' : 'fill-none'}`} />
       <span className="select-none text-black opacity-50">

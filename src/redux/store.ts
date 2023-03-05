@@ -18,16 +18,13 @@ export const store = configureStore({
     [likesApi.reducerPath]: likesApi.reducer,
   },
 
-  // temporary suppressing "A non-serializable value was detected in the state" error
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        // Ignore these action types
-        ignoredActions: ['modal/setModalTweet'],
-        // Ignore these paths in the state
-        ignoredPaths: ['modalStore.modalTweet'],
-      },
-    }).concat([authApi.middleware, usersApi.middleware, tweetsApi.middleware, likesApi.middleware]),
+    getDefaultMiddleware({}).concat([
+      authApi.middleware,
+      usersApi.middleware,
+      tweetsApi.middleware,
+      likesApi.middleware,
+    ]),
 });
 
 type RootState = ReturnType<typeof store.getState>;

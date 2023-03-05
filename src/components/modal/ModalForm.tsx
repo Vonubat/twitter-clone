@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 import closeBtn from '../../assets/icons/close.png';
 import { ValidationMsg } from '../../constants';
-import { useTwitter } from '../../hooks';
 import {
   modalSelector,
   setModalForm,
@@ -23,7 +22,6 @@ import { Backdrop } from './Backdrop';
 export const ModalForm = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { changeImg, addTweet, editTweet } = useTwitter();
   const { modalForm } = useAppSelector(modalSelector);
   const [logIn] = useLoginUserMutation();
   const [signUp] = useRegisterUserMutation();
@@ -88,15 +86,15 @@ export const ModalForm = (): JSX.Element => {
     }
 
     if (modalForm?.type === 'avatar' || modalForm?.type === 'cover') {
-      changeImg(data);
+      // changeImg(data);
     }
 
     if (modalForm?.type === 'newTweet') {
-      addTweet(data);
+      // addTweet(data);
     }
 
     if (modalForm?.type === 'editTweet') {
-      editTweet({ ...data, tweetId: modalForm.tweetId });
+      // editTweet({ ...data, tweetId: modalForm.tweetId });
     }
   };
 
@@ -112,7 +110,7 @@ export const ModalForm = (): JSX.Element => {
 
   useEffect(() => {
     if (modalForm?.type === 'editTweet') {
-      setValue('contentTextarea', modalForm.text);
+      setValue('contentTextarea', modalForm.tweet?.text);
     }
 
     if (modalForm?.type === 'newTweet') {

@@ -1,7 +1,5 @@
 import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 
-import { ValidationMsg } from '../constants';
-
 export interface IUser {
   userId: string;
   avatar: string | null;
@@ -26,46 +24,6 @@ export interface ITweet {
   text: string;
   date: string;
   user?: IUser;
-}
-
-export interface ITwitterContext {
-  users: IUser[];
-  ownerId: string | null;
-  logIn: ILogIn;
-  logOut: ILogOut;
-  signUp: ISignUp;
-  changeImg: IChangeImg;
-  likeTweet: ILikeTweet;
-  addTweet: IAddTweet;
-  editTweet: IEditTweet;
-}
-
-export interface ILogIn {
-  (data: InputAuth): ValidationMsg.wrongCredentials | ValidationMsg.success;
-}
-
-export interface ILogOut {
-  (): void;
-}
-
-export interface ISignUp {
-  (data: InputAuth): ValidationMsg.userIsExist | ValidationMsg.success;
-}
-
-export interface IChangeImg {
-  (data: InputGetUrl): void;
-}
-
-export interface ILikeTweet {
-  (data: ITweet): void;
-}
-
-export interface IAddTweet {
-  (data: InputEditor): void;
-}
-
-export interface IEditTweet {
-  (data: InputEditor & { tweetId: ITweet['tweetId'] }): void;
 }
 
 export type ModalForm =

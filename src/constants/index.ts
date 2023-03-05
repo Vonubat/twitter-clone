@@ -1,5 +1,3 @@
-export const DB_KEY = 'db';
-export const AUTH_KEY = 'auth';
 export const BASE_URL = 'http://localhost:5000';
 export const MINUTE = 60000;
 
@@ -16,7 +14,6 @@ export enum ValidationMsg {
   noSpaces = `Spaces aren't allowed`,
   notOnlySpaces = `Your message can't consist of only spaces`,
   nonValidUrl = 'Non-valid URL-address',
-  success = 'success',
 }
 
 export enum Path {

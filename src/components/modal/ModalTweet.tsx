@@ -3,7 +3,7 @@ import Modal from 'react-overlays/cjs/Modal';
 import defaultAvatar from '../../assets/default_avatar.png';
 import closeBtn from '../../assets/icons/close.png';
 import { useTwitter } from '../../hooks';
-import { modalSelector, setModalForm, setModalTweet, useAppDispatch, useAppSelector } from '../../store';
+import { modalSelector, setModalForm, setModalTweet, useAppDispatch, useAppSelector } from '../../redux';
 import { getTimeForTweetModal } from '../../utils';
 import { Button } from '../ui/Button';
 import { FanAvatars } from '../ui/FansAvatars';
@@ -17,7 +17,7 @@ export const ModalTweet = (): JSX.Element => {
 
   const { currentTweetIndex = 0 } = modalTweet || {};
 
-  const { id: userId = '', firstName = '', lastName = '', username = '', tweets = [] } = modalTweet?.currentUser || {};
+  const { userId = '', firstName = '', lastName = '', username = '', tweets = [] } = modalTweet?.currentUser || {};
 
   const handleClose = (): void => {
     dispatch(setModalTweet(null));

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
 import { Path } from '../../constants';
 import { useTwitter } from '../../hooks';
-import { setModalForm, useAppDispatch } from '../../store';
+import { setModalForm, useAppDispatch } from '../../redux';
 import { Button } from '../ui/Button';
 
 export const Header = (): JSX.Element => {

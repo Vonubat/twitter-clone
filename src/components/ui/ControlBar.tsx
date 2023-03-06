@@ -1,5 +1,5 @@
 import { useTwitter } from '../../hooks';
-import { setModalForm, useAppDispatch } from '../../store';
+import { setModalForm, useAppDispatch } from '../../redux';
 import { IUser } from '../../types';
 
 type Props = {

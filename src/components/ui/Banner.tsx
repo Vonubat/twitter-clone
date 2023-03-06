@@ -1,5 +1,5 @@
 import bannerBird from '../../assets/banner_bird.png';
-import { setModalForm, useAppDispatch } from '../../store';
+import { setModalForm, useAppDispatch } from '../../redux';
 
 import { Button } from './Button';
 

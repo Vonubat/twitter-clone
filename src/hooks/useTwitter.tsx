@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 
 import { AUTH_KEY, DB_KEY, ValidationMsg } from '../constants';
 import dbJSON from '../db/db.json';
-import { modalSelector, useAppSelector } from '../store';
+import { modalSelector, useAppSelector } from '../redux';
 import {
   IAddTweet,
   IChangeImg,
@@ -49,7 +49,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
         return ValidationMsg.cantFindUser;
       }
 
-      setOwnerId(owner.id);
+      setOwnerId(owner.userId);
       navigate(`/${owner.username}`);
 
       return ValidationMsg.success;
@@ -71,7 +71,7 @@ export const TwitterContextProvider: ({ children }: Props) => JSX.Element = ({ c
       }
 
       const newUser: IUser = {
-        id: nanoid(),
+        userId: nanoid(),
         avatar: null,
         bgImage: null,
         username,

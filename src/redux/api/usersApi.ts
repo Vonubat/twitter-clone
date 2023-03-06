@@ -12,7 +12,7 @@ export const usersApi = createApi({
   }),
   tagTypes: ['User'],
   endpoints: (builder) => ({
-    getAllUsers: builder.query<Omit<IUser, 'tweets' | 'likes'>[], void>({
+    getAllUsers: builder.query<IUser[], void>({
       query: () => '',
       providesTags: (result) =>
         result ? [...result.map(({ userId }) => ({ type: 'User' as const, userId })), 'User'] : ['User'],

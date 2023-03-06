@@ -5,7 +5,12 @@ export {
   useVerifyUserQuery,
 } from './api/authApi';
 export { useGetLikesAndUsersOnCertainTweetQuery } from './api/likesApi';
-export { useGetListOfUserTweetsQuery } from './api/tweetsApi';
+export {
+  useCreateNewTweetMutation,
+  useDeleteTweetMutation,
+  useGetListOfUserTweetsQuery,
+  useUpdateTweetMutation,
+} from './api/tweetsApi';
 export {
   useChangeAvatarMutation,
   useChangeBgImageMutation,

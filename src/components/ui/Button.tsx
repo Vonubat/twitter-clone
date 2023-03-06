@@ -1,7 +1,7 @@
 type Props = {
   size: 'small' | 'large';
   type: 'button' | 'submit' | 'reset';
-  color: 'solid' | 'transparent';
+  color: 'solid' | 'transparent' | 'danger';
   externalStyle?: string;
   disabled?: boolean;
   onClick?: () => void;
@@ -16,6 +16,7 @@ export const Button = ({ size, type, color, externalStyle, disabled, onClick, ch
     btnSize: { small: 'w-28', large: 'w-60' },
     btnColor: {
       solid: 'bg-sky-500 hover:bg-sky-700 text-white active:bg-sky-900',
+      danger: 'bg-red-500 hover:bg-red-700 text-white active:bg-red-900',
       transparent:
         'bg-transparent hover:border-2 hover:border-sky-500 text-sky-500 border-transparent active:bg-sky-500 active:text-white',
     },

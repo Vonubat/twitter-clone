@@ -1,4 +1,6 @@
-import { setModalForm, useAppDispatch, useAppSelector, userSelector } from '../../redux';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
+
+import { setModalForm, useAppDispatch, useAppSelector, useGetListOfUserTweetsQuery, userSelector } from '../../redux';
 import { IUser } from '../../types';
 
 type Props = {
@@ -7,7 +9,8 @@ type Props = {
 
 export const ControlBar = ({ user }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { owner } = useAppSelector(userSelector);
+  const { owner, currentUser } = useAppSelector(userSelector);
+  const { data: tweets } = useGetListOfUserTweetsQuery(currentUser?.userId ?? skipToken);
   const isOwnerPage = owner?.userId === user.userId;
 
   return (
@@ -15,7 +18,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
       <div className="controls flex w-[65%] translate-x-[calc(100vw/3)] gap-1 overflow-x-auto">
         <div className="tweets-counter__wrapper flex min-w-[100px] max-w-[100px] flex-col items-center border-b-2 border-sky-500">
           <span className="font-medium text-black text-opacity-50">Tweets</span>
-          <span className="tweets-counter font-semibold text-sky-500">{user.tweets.length}</span>
+          <span className="tweets-counter font-semibold text-sky-500">{tweets?.length}</span>
         </div>
         {isOwnerPage && (
           <button

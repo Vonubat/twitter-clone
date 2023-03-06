@@ -9,8 +9,6 @@ export interface IUser {
   lastName: string;
   location: string;
   joined: string;
-  tweets: ITweet[];
-  likes: ILike[];
 }
 
 export interface ILike {

@@ -9,6 +9,7 @@ import {
   setModalTweet,
   useAppDispatch,
   useAppSelector,
+  useDeleteTweetMutation,
   useGetLikesAndUsersOnCertainTweetQuery,
   userSelector,
 } from '../../redux';
@@ -25,8 +26,9 @@ export const ModalTweet = (): JSX.Element => {
   const { currentUser, owner } = useAppSelector(userSelector);
   const { avatar, firstName, lastName, username, userId } = currentUser || {};
   const { tweetId, text } = modalTweet || {};
-  const { data: likes, isLoading } = useGetLikesAndUsersOnCertainTweetQuery(tweetId ?? skipToken);
+  const { data: likes, isLoading: isLoadingLikes } = useGetLikesAndUsersOnCertainTweetQuery(tweetId ?? skipToken);
   const isOwnerPage = userId === owner?.userId;
+  const [deleteTweet] = useDeleteTweetMutation();
 
   const handleClose = (): void => {
     dispatch(setModalTweet(null));
@@ -40,6 +42,11 @@ export const ModalTweet = (): JSX.Element => {
         tweet: modalTweet,
       }),
     );
+  };
+
+  const handleDeleteTweet = async (): Promise<void> => {
+    await deleteTweet(tweetId);
+    dispatch(setModalTweet(null));
   };
 
   return (
@@ -61,7 +68,7 @@ export const ModalTweet = (): JSX.Element => {
           </div>
         </div>
         <div className="modal__desc mt-5 flex max-h-[250px] w-full overflow-auto">
-          <span className="text-2xl text-black">{text}</span>
+          <span className="break-all text-2xl text-black">{text}</span>
         </div>
         <div className="modal__date-info mt-5">
           <span className="whitespace-nowrap text-black opacity-50">{getTimeForTweetModal(modalTweet)}</span>
@@ -69,7 +76,7 @@ export const ModalTweet = (): JSX.Element => {
         <div className="modal__like-info mt-5 flex gap-3 border-t border-b p-2">
           <div className="text-info flex gap-1">
             <span className="select-none font-semibold text-black">
-              {isLoading && <Loading type="content" />}
+              {isLoadingLikes && <Loading type="content" />}
               {likes && likes.length}
             </span>
             <span className="select-none text-black opacity-50">Likes</span>
@@ -77,9 +84,20 @@ export const ModalTweet = (): JSX.Element => {
           <div className="avatar-container flex flex-wrap gap-3">{likes && <FanAvatars likes={likes} />}</div>
         </div>
         {isOwnerPage && (
-          <Button externalStyle="mt-3 self-center" size="large" type="submit" color="solid" onClick={handleEditTweet}>
-            Edit tweet
-          </Button>
+          <div className="flex justify-center gap-5">
+            <Button externalStyle="mt-3 self-center" size="small" type="submit" color="solid" onClick={handleEditTweet}>
+              Edit
+            </Button>
+            <Button
+              externalStyle="mt-3 self-center"
+              size="small"
+              type="button"
+              color="danger"
+              onClick={handleDeleteTweet}
+            >
+              Delete
+            </Button>
+          </div>
         )}
         <button className="button__close absolute -top-6 -right-6 h-5 w-5" onClick={handleClose}>
           <img src={closeBtn} alt="close btn" />

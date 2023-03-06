@@ -24,10 +24,10 @@ export const Tweet = ({ tweet }: Props): JSX.Element => {
       <article className="tweet-content flex flex-col">
         <div className="tweet-content__info flex items-center gap-2">
           <h3 className="text-lg font-semibold text-black">{`${user?.firstName} ${user?.lastName}`}</h3>
-          <span className="text-black opacity-50">{`@${user?.username}`}</span>
+          <span className=" text-black opacity-50 ">{`@${user?.username}`}</span>
           <span className="whitespace-nowrap text-black opacity-50">{getTimeForTweet(tweet)}</span>
         </div>
-        <span className="tweet-content__content mt-1">{tweet.text}</span>
+        <span className="tweet-content__content mt-1 break-all">{tweet.text}</span>
         <LikeBtn tweet={tweet} />
       </article>
     </div>

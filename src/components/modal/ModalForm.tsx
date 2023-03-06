@@ -25,8 +25,8 @@ import { InputForm } from '../ui/InputForm';
 import { Backdrop } from './Backdrop';
 
 export const ModalForm = (): JSX.Element => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { modalForm } = useAppSelector(modalSelector);
   const { type } = modalForm || {};
   const [logIn] = useLoginUserMutation();
@@ -35,7 +35,6 @@ export const ModalForm = (): JSX.Element => {
   const [changeBgImage] = useChangeBgImageMutation();
   const [createNewTweet] = useCreateNewTweetMutation();
   const [updateTweet] = useUpdateTweetMutation();
-
   const form = useForm<CustomFormInputs>();
   const {
     handleSubmit,

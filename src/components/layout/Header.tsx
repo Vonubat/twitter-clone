@@ -29,8 +29,8 @@ export const Header = (): JSX.Element => {
     dispatch(setModalForm({ type: 'signup' }));
   };
 
-  const handleLogOut = (): void => {
-    logOut();
+  const handleLogOut = async (): Promise<void> => {
+    await logOut();
   };
 
   return (

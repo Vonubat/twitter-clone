@@ -17,8 +17,20 @@ export const likesApi = createApi({
           url: tweetId,
         };
       },
+      providesTags: (result) =>
+        result ? [...result.map(({ likeId }) => ({ type: 'Like' as const, likeId })), 'Like'] : ['Like'],
+    }),
+    addRemoveLike: builder.mutation<ILike[], { tweetId: ITweet['tweetId'] }>({
+      query: (data) => {
+        return {
+          url: '',
+          method: 'POST',
+          body: data,
+        };
+      },
+      invalidatesTags: ['Like'],
     }),
   }),
 });
 
-export const { useGetLikesAndUsersOnCertainTweetQuery } = likesApi;
+export const { useGetLikesAndUsersOnCertainTweetQuery, useAddRemoveLikeMutation } = likesApi;

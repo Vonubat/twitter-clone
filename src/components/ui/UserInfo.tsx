@@ -12,7 +12,6 @@ export const UserInfo = ({ user }: Props): JSX.Element => {
     <div className="user-info flex flex-col">
       <h2 className="text-2xl font-bold text-black">{`${user.firstName} ${user.lastName}`}</h2>
       <span className="text-black opacity-50">{`@${user.username}`}</span>
-
       <div className="mt-7 flex items-center gap-3">
         <img src={calendarIcon} alt="calendar icon" />
         <span className="font-medium text-black opacity-50">{getTimeForUserInfo(user)}</span>

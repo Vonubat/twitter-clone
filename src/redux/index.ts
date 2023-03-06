@@ -4,7 +4,7 @@ export {
   useRegisterUserMutation,
   useVerifyUserQuery,
 } from './api/authApi';
-export { useGetLikesAndUsersOnCertainTweetQuery } from './api/likesApi';
+export { useAddRemoveLikeMutation, useGetLikesAndUsersOnCertainTweetQuery } from './api/likesApi';
 export {
   useCreateNewTweetMutation,
   useDeleteTweetMutation,

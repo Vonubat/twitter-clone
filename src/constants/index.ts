@@ -17,6 +17,18 @@ export enum ValidationMsg {
   sessionHasExpired = 'Session has expired. Please, authenticate yourself',
 }
 
+export enum UserEvents {
+  loginUser = 'loginUser',
+  logoutUser = 'logoutUser',
+  registerUser = 'registerUser',
+}
+
+export enum SystemMsg {
+  loginUser = '👌 You have successfully logged in',
+  logoutUser = '🦄 You have successfully logged out',
+  registerUser = '🏆 You have successfully registered',
+}
+
 export enum Path {
   welcomePage = '/',
   userPage = '/:username',

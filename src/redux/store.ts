@@ -6,6 +6,7 @@ import { likesApi } from './api/likesApi';
 import { tweetsApi } from './api/tweetsApi';
 import { usersApi } from './api/usersApi';
 import { macroErrorHandler } from './middlewares/macroErrorHandler';
+import { macroUserEventsHandler } from './middlewares/macroUserEventsHandler';
 import modalReducer from './slices/modalSlice';
 import userReducer from './slices/userSlice';
 
@@ -27,6 +28,7 @@ export const store = configureStore({
       tweetsApi.middleware,
       likesApi.middleware,
       macroErrorHandler,
+      macroUserEventsHandler,
     ]),
 });
 

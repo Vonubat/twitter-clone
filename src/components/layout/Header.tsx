@@ -1,13 +1,22 @@
 import { NavLink } from 'react-router-dom';
 
 import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
-import { Path } from '../../constants';
-import { setModalForm, useAppDispatch, useAppSelector, useLogoutUserMutation, userSelector } from '../../redux';
+import { MINUTE, Path } from '../../constants';
+import {
+  setModalForm,
+  useAppDispatch,
+  useAppSelector,
+  useLogoutUserMutation,
+  userSelector,
+  useVerifyUserQuery,
+} from '../../redux';
 import { Button } from '../ui/Button';
+import { Loading } from '../ui/indicators/Loading';
 
 export const Header = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { owner } = useAppSelector(userSelector);
+  const { isLoading, isSuccess, isError } = useVerifyUserQuery(null, { pollingInterval: MINUTE });
   const [logOut] = useLogoutUserMutation();
 
   const handleLogIn = (): void => {
@@ -31,18 +40,23 @@ export const Header = (): JSX.Element => {
         </div>
       </NavLink>
       <div className="button__wrapper flex gap-3">
-        <Button
-          externalStyle={owner ? 'invisible' : ' visible'}
-          size="small"
-          type="button"
-          color="transparent"
-          onClick={handleLogIn}
-        >
-          Log In
-        </Button>
-        <Button size="small" type="button" color="solid" onClick={owner ? handleLogOut : handleSignUp}>
-          {owner ? 'Log out' : 'Sign up'}
-        </Button>
+        {isLoading && <Loading type="content" />}
+        {(isSuccess || isError) && (
+          <>
+            <Button
+              externalStyle={owner ? 'invisible' : ' visible'}
+              size="small"
+              type="button"
+              color="transparent"
+              onClick={handleLogIn}
+            >
+              Log In
+            </Button>
+            <Button size="small" type="button" color="solid" onClick={owner ? handleLogOut : handleSignUp}>
+              {owner ? 'Log out' : 'Sign up'}
+            </Button>
+          </>
+        )}
       </div>
     </header>
   );

@@ -1,5 +1,4 @@
-import { useTwitter } from '../../hooks';
-import { setModalForm, useAppDispatch } from '../../redux';
+import { setModalForm, useAppDispatch, useAppSelector, userSelector } from '../../redux';
 import { IUser } from '../../types';
 
 type Props = {
@@ -7,8 +6,9 @@ type Props = {
 };
 
 export const ControlBar = ({ user }: Props): JSX.Element => {
-  const { ownerId } = useTwitter();
   const dispatch = useAppDispatch();
+  const { owner } = useAppSelector(userSelector);
+  const isOwnerPage = owner?.userId === user.userId;
 
   return (
     <div className="flex h-[50px] w-full items-center bg-white">
@@ -17,7 +17,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
           <span className="font-medium text-black text-opacity-50">Tweets</span>
           <span className="tweets-counter font-semibold text-sky-500">{user.tweets.length}</span>
         </div>
-        {ownerId === user.id && (
+        {isOwnerPage && (
           <button
             className="tweets-btn__add w-full min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
             onClick={() => dispatch(setModalForm({ type: 'newTweet' }))}
@@ -25,7 +25,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
             Add new Tweet
           </button>
         )}
-        {ownerId === user.id && (
+        {isOwnerPage && (
           <button
             className="tweets-btn__change-avatar min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
             onClick={() => dispatch(setModalForm({ type: 'avatar' }))}
@@ -33,7 +33,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
             Change Avatar
           </button>
         )}
-        {ownerId === user.id && (
+        {isOwnerPage && (
           <button
             className="tweets-btn__change-cover min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
             onClick={() => dispatch(setModalForm({ type: 'cover' }))}

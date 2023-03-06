@@ -9,7 +9,7 @@ export const tweetsApi = createApi({
     baseUrl: `${BASE_URL}/tweets`,
     credentials: 'include',
   }),
-  tagTypes: ['Tweets'],
+  tagTypes: ['Tweet'],
   endpoints: (builder) => ({
     getListOfUserTweets: builder.query<ITweet[], IUser['userId']>({
       query: (userId) => {

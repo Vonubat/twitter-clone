@@ -10,7 +10,6 @@ import { Loading } from './indicators/Loading';
 
 export const Search = (): JSX.Element => {
   const { data: users, isLoading } = useGetAllUsersQuery();
-
   const [foundedUsers, setFoundedUsers] = useState<Omit<IUser, 'tweets' | 'likes'>[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const debouncedSearchValue = useDebounce<string>(searchValue);

@@ -1,6 +1,5 @@
-export const DB_KEY = 'db';
-export const AUTH_KEY = 'auth';
 export const BASE_URL = 'http://localhost:5000';
+export const MINUTE = 60000;
 
 export enum TypingSvg {
   guccitterIsWhat = 'https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&duration=3000&repeat=false&color=34495e&multiline=true&width=350&height=100&lines=Guccitter+is+what%E2%80%99s+happening+;and+what+people+are+talking;+about+right+now.',
@@ -15,7 +14,6 @@ export enum ValidationMsg {
   noSpaces = `Spaces aren't allowed`,
   notOnlySpaces = `Your message can't consist of only spaces`,
   nonValidUrl = 'Non-valid URL-address',
-  success = 'success',
 }
 
 export enum Path {

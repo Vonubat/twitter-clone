@@ -3,14 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { Avatar, Banner, ControlBar, Cover, Loading, Tweet, UserInfo } from '../components';
 import { Path } from '../constants';
-import { useTwitter } from '../hooks';
-import { useGetUserQuery } from '../redux';
+import { useAppSelector, useGetUserQuery, userSelector } from '../redux';
 
 export const UserPage = (): JSX.Element => {
-  const { ownerId } = useTwitter();
   const { username } = useParams();
   const navigate = useNavigate();
-  const { data: user, isError } = useGetUserQuery(username as string);
+  const { owner } = useAppSelector(userSelector);
+  const { data: user, isError } = useGetUserQuery(username as string, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     if (isError) {
@@ -34,7 +33,7 @@ export const UserPage = (): JSX.Element => {
             <Tweet key={tweet.tweetId} tweet={tweet} />
           ))}
         </div>
-        <div className="banner__container hidden xl:block">{!ownerId && <Banner />}</div>
+        <div className="banner__container hidden xl:block">{!owner && <Banner />}</div>
       </div>
     </main>
   ) : (

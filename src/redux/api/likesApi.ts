@@ -9,7 +9,7 @@ export const likesApi = createApi({
     baseUrl: `${BASE_URL}/likes`,
     credentials: 'include',
   }),
-  tagTypes: ['Likes'],
+  tagTypes: ['Like'],
   endpoints: (builder) => ({
     getLikesAndUsersOnCertainTweet: builder.query<ILike[], ITweet['tweetId']>({
       query: (tweetId) => {

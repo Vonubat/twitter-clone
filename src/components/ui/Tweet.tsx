@@ -1,5 +1,5 @@
 import defaultAvatar from '../../assets/default_avatar.png';
-import { useTwitter } from '../../hooks';
+import { setModalTweet, useAppDispatch } from '../../store';
 import { IUser } from '../../types';
 import { getTimeForTweet } from '../../utils';
 
@@ -11,10 +11,10 @@ type Props = {
 };
 
 export const Tweet = ({ user, currentTweetIndex }: Props): JSX.Element => {
-  const { setShowModalTweet } = useTwitter();
+  const dispatch = useAppDispatch();
 
   const handleTweetClick = () => {
-    setShowModalTweet({ currentUser: user, currentTweetIndex });
+    dispatch(setModalTweet({ currentUser: user, currentTweetIndex }));
   };
 
   return (

@@ -5,6 +5,7 @@ import Modal from 'react-overlays/cjs/Modal';
 import closeBtn from '../../assets/icons/close.png';
 import { ValidationMsg } from '../../constants';
 import { useTwitter } from '../../hooks';
+import { modalSelector, setModalForm, useAppDispatch, useAppSelector } from '../../store';
 import { CustomFormInputs } from '../../types';
 import { Button } from '../ui/Button';
 import { InputForm } from '../ui/InputForm';
@@ -12,7 +13,9 @@ import { InputForm } from '../ui/InputForm';
 import { Backdrop } from './Backdrop';
 
 export const ModalForm = (): JSX.Element => {
-  const { showModalForm, setShowModalForm, logIn, signUp, changeImg, addTweet, editTweet } = useTwitter();
+  const { logIn, signUp, changeImg, addTweet, editTweet } = useTwitter();
+  const { modalForm } = useAppSelector(modalSelector);
+  const dispatch = useAppDispatch();
 
   const form = useForm<CustomFormInputs>();
   const {
@@ -24,10 +27,12 @@ export const ModalForm = (): JSX.Element => {
     formState: { errors, isSubmitSuccessful, isDirty, isValidating },
   } = form;
 
-  const handleClose = (): void => setShowModalForm(null);
+  const handleClose = (): void => {
+    dispatch(setModalForm(null));
+  };
 
   const handleFormSubmit = (data: CustomFormInputs): void => {
-    if (showModalForm?.type === 'login') {
+    if (modalForm?.type === 'login') {
       const res = logIn(data);
 
       if (res === ValidationMsg.cantFindUser) {
@@ -45,7 +50,7 @@ export const ModalForm = (): JSX.Element => {
       }
     }
 
-    if (showModalForm?.type === 'signup') {
+    if (modalForm?.type === 'signup') {
       const res = signUp(data);
 
       if (res === ValidationMsg.userIsExist) {
@@ -58,19 +63,19 @@ export const ModalForm = (): JSX.Element => {
       }
     }
 
-    if (showModalForm?.type === 'avatar' || showModalForm?.type === 'cover') {
+    if (modalForm?.type === 'avatar' || modalForm?.type === 'cover') {
       changeImg(data);
     }
 
-    if (showModalForm?.type === 'newTweet') {
+    if (modalForm?.type === 'newTweet') {
       addTweet(data);
     }
 
-    if (showModalForm?.type === 'editTweet') {
-      editTweet({ ...data, tweetId: showModalForm.tweetId });
+    if (modalForm?.type === 'editTweet') {
+      editTweet({ ...data, tweetId: modalForm.tweetId });
     }
 
-    setShowModalForm(null);
+    dispatch(setModalForm(null));
   };
 
   useEffect((): void => {
@@ -84,65 +89,60 @@ export const ModalForm = (): JSX.Element => {
   }, [clearErrors, isSubmitSuccessful, isValidating, reset]);
 
   useEffect(() => {
-    if (showModalForm?.type === 'editTweet') {
-      setValue('contentTextarea', showModalForm.text);
+    if (modalForm?.type === 'editTweet') {
+      setValue('contentTextarea', modalForm.text);
     }
 
-    if (showModalForm?.type === 'newTweet') {
+    if (modalForm?.type === 'newTweet') {
       setValue('contentTextarea', '');
     }
-  }, [setValue, showModalForm]);
+  }, [setValue, modalForm]);
 
   return (
     <Modal
       className={`modal fixed top-1/2 left-1/2 z-50 flex ${
-        showModalForm?.type === 'signup' || showModalForm?.type === 'login'
-          ? 'w-[300px]'
-          : 'w-full min-w-[300px] max-w-[70vw]'
+        modalForm?.type === 'signup' || modalForm?.type === 'login' ? 'w-[300px]' : 'w-full min-w-[300px] max-w-[70vw]'
       } -translate-y-1/2 -translate-x-1/2 flex-col items-center rounded-md bg-white p-7 shadow-md outline-none`}
-      show={!!showModalForm}
+      show={!!modalForm}
       onHide={handleClose}
       renderBackdrop={Backdrop}
     >
       <>
         <div className="modal__header w-full">
           <div className="modal__title text-center text-lg font-semibold text-black text-opacity-50">
-            {showModalForm?.type === 'login' && 'Log In'}
-            {showModalForm?.type === 'signup' && 'Sign Up'}
-            {showModalForm?.type === 'newTweet' && 'Create new tweet'}
-            {showModalForm?.type === 'editTweet' && 'Edit your tweet'}
-            {(showModalForm?.type === 'avatar' || showModalForm?.type === 'cover') &&
-              `Paste URL for ${showModalForm} image`}
+            {modalForm?.type === 'login' && 'Log In'}
+            {modalForm?.type === 'signup' && 'Sign Up'}
+            {modalForm?.type === 'newTweet' && 'Create new tweet'}
+            {modalForm?.type === 'editTweet' && 'Edit your tweet'}
+            {(modalForm?.type === 'avatar' || modalForm?.type === 'cover') && `Paste URL for ${modalForm?.type} image`}
           </div>
-          {showModalForm?.type === 'signup' && (
+          {modalForm?.type === 'signup' && (
             <button
               className="modal__link text-sm text-black  text-opacity-50 underline-offset-4 hover:underline"
-              onClick={() => setShowModalForm({ type: 'login' })}
+              onClick={() => dispatch(setModalForm({ type: 'login' }))}
             >
               Already signed up?
             </button>
           )}
         </div>
         <form className="modal__desc flex w-full flex-col gap-4 pt-5" onSubmit={handleSubmit(handleFormSubmit)}>
-          {(showModalForm?.type === 'signup' || showModalForm?.type === 'login') && (
+          {(modalForm?.type === 'signup' || modalForm?.type === 'login') && (
             <InputForm form={form} name="username" type="text" placeholder="Nickname" />
           )}
-          {(showModalForm?.type === 'signup' || showModalForm?.type === 'login') && (
+          {(modalForm?.type === 'signup' || modalForm?.type === 'login') && (
             <InputForm form={form} name="password" type="password" placeholder="Password" />
           )}
-          {showModalForm?.type === 'signup' && (
+          {modalForm?.type === 'signup' && (
             <InputForm form={form} name="firstName" type="text" placeholder="First Name" />
           )}
-          {showModalForm?.type === 'signup' && (
+          {modalForm?.type === 'signup' && (
             <InputForm form={form} name="lastName" type="text" placeholder="Last Name" />
           )}
-          {showModalForm?.type === 'signup' && (
-            <InputForm form={form} name="location" type="text" placeholder="Location" />
-          )}
-          {(showModalForm?.type === 'avatar' || showModalForm?.type === 'cover') && (
+          {modalForm?.type === 'signup' && <InputForm form={form} name="location" type="text" placeholder="Location" />}
+          {(modalForm?.type === 'avatar' || modalForm?.type === 'cover') && (
             <InputForm form={form} name="url" type="text" placeholder="URL" />
           )}
-          {(showModalForm?.type === 'newTweet' || showModalForm?.type === 'editTweet') && (
+          {(modalForm?.type === 'newTweet' || modalForm?.type === 'editTweet') && (
             <InputForm form={form} name="contentTextarea" type="text" placeholder="Write a tweet..." />
           )}
           <Button
@@ -152,11 +152,11 @@ export const ModalForm = (): JSX.Element => {
             color="solid"
             disabled={!isDirty || Boolean(Object.keys(errors).length)}
           >
-            {showModalForm?.type === 'login' && 'Log In'}
-            {showModalForm?.type === 'signup' && 'Sign Up'}
-            {showModalForm?.type === 'newTweet' && 'Create tweet'}
-            {showModalForm?.type === 'editTweet' && 'Edit tweet'}
-            {(showModalForm?.type === 'avatar' || showModalForm?.type === 'cover') && `Change ${showModalForm?.type}`}
+            {modalForm?.type === 'login' && 'Log In'}
+            {modalForm?.type === 'signup' && 'Sign Up'}
+            {modalForm?.type === 'newTweet' && 'Create tweet'}
+            {modalForm?.type === 'editTweet' && 'Edit tweet'}
+            {(modalForm?.type === 'avatar' || modalForm?.type === 'cover') && `Change ${modalForm?.type}`}
           </Button>
         </form>
         <button className="button__close absolute -top-6 -right-6 h-5 w-5" onClick={handleClose}>

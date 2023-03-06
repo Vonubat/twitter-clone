@@ -55,7 +55,7 @@ export type InputName = keyof CustomFormInputs;
 
 export interface IGenericResponse {
   statusCode?: string;
-  message?: string;
+  message?: string | string[];
   error?: string;
 }
 

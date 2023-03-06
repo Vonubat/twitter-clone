@@ -16,7 +16,9 @@ import { Loading } from '../ui/indicators/Loading';
 export const Header = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { owner } = useAppSelector(userSelector);
-  const { isLoading, isSuccess, isError } = useVerifyUserQuery(null, { pollingInterval: MINUTE });
+  const { isLoading, isSuccess, isError } = useVerifyUserQuery(null, {
+    pollingInterval: MINUTE,
+  });
   const [logOut] = useLogoutUserMutation();
 
   const handleLogIn = (): void => {

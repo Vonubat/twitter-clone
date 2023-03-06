@@ -10,10 +10,13 @@ import {
   setModalForm,
   useAppDispatch,
   useAppSelector,
+  useChangeAvatarMutation,
+  useChangeBgImageMutation,
   useLoginUserMutation,
   useRegisterUserMutation,
 } from '../../redux';
-import { CustomFormInputs, isFetchBaseQueryError, isGenericResponse } from '../../types';
+import { CustomFormInputs } from '../../types';
+import { findErrorInResponse } from '../../utils';
 import { Button } from '../ui/Button';
 import { InputForm } from '../ui/InputForm';
 
@@ -25,6 +28,8 @@ export const ModalForm = (): JSX.Element => {
   const { modalForm } = useAppSelector(modalSelector);
   const [logIn] = useLoginUserMutation();
   const [signUp] = useRegisterUserMutation();
+  const [changeAvatar] = useChangeAvatarMutation();
+  const [changeBgImage] = useChangeBgImageMutation();
 
   const form = useForm<CustomFormInputs>();
   const {
@@ -48,19 +53,17 @@ export const ModalForm = (): JSX.Element => {
         dispatch(setModalForm(null));
         navigate(owner.username);
       } catch (error) {
-        if (isFetchBaseQueryError(error) && isGenericResponse(error.data)) {
-          const { message: msg } = error.data;
+        const isIncludeWrongCredentialsError = findErrorInResponse(error, ValidationMsg.wrongCredentials);
 
-          if (msg === ValidationMsg.wrongCredentials) {
-            setError('username', {
-              type: 'manual',
-              message: ValidationMsg.wrongCredentials,
-            });
-            setError('password', {
-              type: 'manual',
-              message: ValidationMsg.wrongCredentials,
-            });
-          }
+        if (isIncludeWrongCredentialsError) {
+          setError('username', {
+            type: 'manual',
+            message: ValidationMsg.wrongCredentials,
+          });
+          setError('password', {
+            type: 'manual',
+            message: ValidationMsg.wrongCredentials,
+          });
         }
       }
     }
@@ -72,21 +75,65 @@ export const ModalForm = (): JSX.Element => {
         dispatch(setModalForm(null));
         navigate(owner.username);
       } catch (error) {
-        if (isFetchBaseQueryError(error) && isGenericResponse(error.data)) {
-          const { error: msg } = error.data;
+        const isIncludeUserIsExistError = findErrorInResponse(error, ValidationMsg.userIsExist);
 
-          if (msg === ValidationMsg.userIsExist) {
-            setError('username', {
-              type: 'manual',
-              message: ValidationMsg.userIsExist,
-            });
-          }
+        if (isIncludeUserIsExistError) {
+          setError('username', {
+            type: 'manual',
+            message: ValidationMsg.userIsExist,
+          });
         }
       }
     }
 
-    if (modalForm?.type === 'avatar' || modalForm?.type === 'cover') {
-      // changeImg(data);
+    if (modalForm?.type === 'avatar') {
+      try {
+        await changeAvatar(data).unwrap();
+
+        dispatch(setModalForm(null));
+      } catch (error) {
+        const isIncludeNonValidUrlError = findErrorInResponse(error, ValidationMsg.nonValidUrl);
+        const isIncludeUnauthorizedError = findErrorInResponse(error, ValidationMsg.unauthorized);
+
+        if (isIncludeNonValidUrlError) {
+          setError('url', {
+            type: 'manual',
+            message: ValidationMsg.nonValidUrl,
+          });
+        }
+
+        if (isIncludeUnauthorizedError) {
+          setError('url', {
+            type: 'manual',
+            message: ValidationMsg.sessionHasExpired,
+          });
+        }
+      }
+    }
+
+    if (modalForm?.type === 'cover') {
+      try {
+        await changeBgImage(data).unwrap();
+
+        dispatch(setModalForm(null));
+      } catch (error) {
+        const isIncludeNonValidUrlError = findErrorInResponse(error, ValidationMsg.nonValidUrl);
+        const isIncludeUnauthorizedError = findErrorInResponse(error, ValidationMsg.unauthorized);
+
+        if (isIncludeNonValidUrlError) {
+          setError('url', {
+            type: 'manual',
+            message: ValidationMsg.nonValidUrl,
+          });
+        }
+
+        if (isIncludeUnauthorizedError) {
+          setError('url', {
+            type: 'manual',
+            message: ValidationMsg.sessionHasExpired,
+          });
+        }
+      }
     }
 
     if (modalForm?.type === 'newTweet') {

@@ -33,6 +33,7 @@
     "react-overlays": "^5.2.1",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.1",
+    "react-toastify": "^9.1.1",
     "vite-plugin-svgr": "^2.4.0"
   },
   "devDependencies": {

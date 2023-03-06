@@ -1,23 +1,18 @@
 import defaultAvatar from '../../assets/default_avatar.png';
-import { useTwitter } from '../../hooks';
-import { ILike, IUser } from '../../types';
+import { ILike } from '../../types';
 
 type Props = {
   likes: ILike[];
 };
 
-export const FanAvatars = ({ likes = [] }: Props): JSX.Element => {
-  const { users } = useTwitter();
-
-  const fans: IUser[] = users.filter((user) => likes.some((like) => like.userId === user.id));
-
+export const FanAvatars = ({ likes }: Props): JSX.Element => {
   return (
     <>
-      {fans.map((fan) => (
+      {likes.map((like) => (
         <img
-          key={fan.id}
+          key={like.user?.userId}
           className="h-5 w-5 shrink-0 rounded-full object-cover"
-          src={fan.avatar || defaultAvatar}
+          src={like.user?.avatar || defaultAvatar}
           alt="Avatar"
         />
       ))}

@@ -26,11 +26,6 @@ export interface ITweet {
   user?: IUser;
 }
 
-export interface ICurrentTweetInfo {
-  currentUser: IUser;
-  currentTweetIndex: number;
-}
-
 export interface ITwitterContext {
   users: IUser[];
   ownerId: string | null;
@@ -60,7 +55,7 @@ export interface IChangeImg {
 }
 
 export interface ILikeTweet {
-  (data: ICurrentTweetInfo): void;
+  (data: ITweet): void;
 }
 
 export interface IAddTweet {
@@ -73,10 +68,10 @@ export interface IEditTweet {
 
 export type ModalForm =
   | { type: 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' }
-  | { type: 'editTweet'; text: string; tweetId: ITweet['tweetId'] }
+  | { type: 'editTweet'; tweet: ModalTweet }
   | null;
 
-export type ModalTweet = ICurrentTweetInfo | null;
+export type ModalTweet = ITweet | null;
 
 type InputAuth = {
   username: string;

@@ -1,4 +1,4 @@
-import { ITweet, IUser } from '../types';
+import { ITweet, IUser, ModalTweet } from '../types';
 
 export const getTimeForUserInfo = (user: IUser) => {
   const { joined } = user;
@@ -9,8 +9,8 @@ export const getTimeForUserInfo = (user: IUser) => {
   })} ${dt.getFullYear()}`;
 };
 
-export const getTimeForTweet = (user: IUser, currentTweetIndex: number) => {
-  const { date } = user.tweets[currentTweetIndex];
+export const getTimeForTweet = (tweet: ITweet) => {
+  const { date } = tweet || {};
   const dt = new Date(Date.parse(date));
 
   return `${dt.getDate()} ${dt.toLocaleString('en-US', {
@@ -18,8 +18,8 @@ export const getTimeForTweet = (user: IUser, currentTweetIndex: number) => {
   })} `;
 };
 
-export const getTimeForTweetModal = (tweets: ITweet[], currentTweetIndex: number) => {
-  const { date = '2000-01-01 00:00:00.000000-03' } = tweets[currentTweetIndex] || {};
+export const getTimeForTweetModal = (tweet: ModalTweet) => {
+  const { date = '2000-01-01 00:00:00.000000-03' } = tweet || {};
   const dt = new Date(Date.parse(date));
 
   return `${dt.getHours() || '00'}:${dt.getMinutes() || '00'} - ${dt.getDate() || '1'} ${

@@ -97,19 +97,11 @@ export const ModalForm = (): JSX.Element => {
         dispatch(setModalForm(null));
       } catch (error) {
         const isIncludeNonValidUrlError = findErrorInResponse(error, ValidationMsg.nonValidUrl);
-        const isIncludeUnauthorizedError = findErrorInResponse(error, ValidationMsg.unauthorized);
 
         if (isIncludeNonValidUrlError) {
           setError('url', {
             type: 'manual',
             message: ValidationMsg.nonValidUrl,
-          });
-        }
-
-        if (isIncludeUnauthorizedError) {
-          setError('url', {
-            type: 'manual',
-            message: ValidationMsg.sessionHasExpired,
           });
         }
       }
@@ -122,7 +114,6 @@ export const ModalForm = (): JSX.Element => {
         dispatch(setModalForm(null));
       } catch (error) {
         const isIncludeNonValidUrlError = findErrorInResponse(error, ValidationMsg.nonValidUrl);
-        const isIncludeUnauthorizedError = findErrorInResponse(error, ValidationMsg.unauthorized);
 
         if (isIncludeNonValidUrlError) {
           setError('url', {
@@ -130,55 +121,26 @@ export const ModalForm = (): JSX.Element => {
             message: ValidationMsg.nonValidUrl,
           });
         }
-
-        if (isIncludeUnauthorizedError) {
-          setError('url', {
-            type: 'manual',
-            message: ValidationMsg.sessionHasExpired,
-          });
-        }
       }
     }
 
     if (type === 'newTweet') {
-      try {
-        await createNewTweet(data).unwrap();
+      await createNewTweet(data);
 
-        dispatch(setModalForm(null));
-      } catch (error) {
-        const isIncludeUnauthorizedError = findErrorInResponse(error, ValidationMsg.unauthorized);
-
-        if (isIncludeUnauthorizedError) {
-          setError('contentTextarea', {
-            type: 'manual',
-            message: ValidationMsg.sessionHasExpired,
-          });
-        }
-      }
+      dispatch(setModalForm(null));
     }
 
     if (modalForm?.type === 'editTweet') {
-      try {
-        const { tweet } = modalForm;
-        const { contentTextarea } = data;
+      const { tweet } = modalForm;
+      const { contentTextarea } = data;
 
-        if (tweet) {
-          const { tweetId } = tweet;
+      if (tweet) {
+        const { tweetId } = tweet;
 
-          await updateTweet({ tweetId, contentTextarea }).unwrap();
-        }
-
-        dispatch(setModalForm(null));
-      } catch (error) {
-        const isIncludeUnauthorizedError = findErrorInResponse(error, ValidationMsg.unauthorized);
-
-        if (isIncludeUnauthorizedError) {
-          setError('contentTextarea', {
-            type: 'manual',
-            message: ValidationMsg.sessionHasExpired,
-          });
-        }
+        await updateTweet({ tweetId, contentTextarea });
       }
+
+      dispatch(setModalForm(null));
     }
   };
 

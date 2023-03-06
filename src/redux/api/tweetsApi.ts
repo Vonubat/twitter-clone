@@ -7,8 +7,9 @@ export const tweetsApi = createApi({
   reducerPath: 'tweetsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}/tweets`,
+    credentials: 'include',
   }),
-  // tagTypes: ['Tweets'],
+  tagTypes: ['Tweets'],
   endpoints: (builder) => ({
     getListOfUserTweets: builder.query<ITweet[], IUser['userId']>({
       query: (userId) => {

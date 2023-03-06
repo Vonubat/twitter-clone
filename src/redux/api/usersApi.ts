@@ -9,7 +9,7 @@ export const usersApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}/users`,
   }),
-  // tagTypes: ['Users'],
+  tagTypes: ['Users'],
   endpoints: (builder) => ({
     getAllUsers: builder.query<Omit<IUser, 'tweets' | 'likes'>[], void>({
       query: () => '',
@@ -20,8 +20,7 @@ export const usersApi = createApi({
           url: username,
         };
       },
-      // transformResponse: (result: { data: { user: IUser } }) => result.data.user,
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
 

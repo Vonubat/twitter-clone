@@ -19,8 +19,8 @@ const userSlice = createSlice({
     setCurrentUser: (state, action: PayloadAction<IUser>) => {
       state.currentUser = action.payload;
     },
-    setOwner: (state, action: PayloadAction<IUser>) => {
-      state.currentUser = action.payload;
+    setOwner: (state, action: PayloadAction<IUser | null>) => {
+      state.owner = action.payload;
     },
   },
 });

@@ -7,8 +7,9 @@ export const likesApi = createApi({
   reducerPath: 'likesApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}/likes`,
+    credentials: 'include',
   }),
-  // tagTypes: ['Likes'],
+  tagTypes: ['Likes'],
   endpoints: (builder) => ({
     getLikesAndUsersOnCertainTweet: builder.query<ILike[], ITweet['tweetId']>({
       query: (tweetId) => {

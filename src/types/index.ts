@@ -1,3 +1,5 @@
+import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
+
 import { ValidationMsg } from '../constants';
 
 export interface IUser {
@@ -39,7 +41,7 @@ export interface ITwitterContext {
 }
 
 export interface ILogIn {
-  (data: InputAuth): ValidationMsg.cantFindUser | ValidationMsg.success;
+  (data: InputAuth): ValidationMsg.wrongCredentials | ValidationMsg.success;
 }
 
 export interface ILogOut {
@@ -73,7 +75,7 @@ export type ModalForm =
 
 export type ModalTweet = ITweet | null;
 
-type InputAuth = {
+export type InputAuth = {
   username: string;
   password: string;
   firstName: string;
@@ -81,11 +83,11 @@ type InputAuth = {
   location: string;
 };
 
-type InputGetUrl = {
+export type InputGetUrl = {
   url: string;
 };
 
-type InputEditor = {
+export type InputEditor = {
   contentTextarea: string;
 };
 
@@ -94,6 +96,14 @@ export type CustomFormInputs = InputAuth & InputGetUrl & InputEditor;
 export type InputName = keyof CustomFormInputs;
 
 export interface IGenericResponse {
-  status: string;
+  statusCode?: string;
   message: string;
+}
+
+export function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryError {
+  return typeof error === 'object' && error != null && 'status' in error;
+}
+
+export function isGenericResponse(data: unknown): data is IGenericResponse {
+  return typeof data === 'object' && data != null && 'message' in data;
 }

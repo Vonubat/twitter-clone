@@ -9,6 +9,7 @@ export const usersApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}/users`,
     credentials: 'include',
+    mode: 'cors',
   }),
   tagTypes: ['User'],
   endpoints: (builder) => ({

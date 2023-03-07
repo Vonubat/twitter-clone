@@ -11,6 +11,7 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}/auth`,
     credentials: 'include',
+    mode: 'cors',
   }),
   tagTypes: ['User'],
   endpoints: (builder) => ({

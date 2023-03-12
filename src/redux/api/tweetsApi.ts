@@ -8,6 +8,7 @@ export const tweetsApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}/tweets`,
     credentials: 'include',
+    mode: 'cors',
   }),
   tagTypes: ['Tweet'],
   endpoints: (builder) => ({

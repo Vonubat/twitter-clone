@@ -8,6 +8,7 @@ export const likesApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${BASE_URL}/likes`,
     credentials: 'include',
+    mode: 'cors',
   }),
   tagTypes: ['Like'],
   endpoints: (builder) => ({

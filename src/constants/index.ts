@@ -1,4 +1,7 @@
-export const BASE_URL = 'http://localhost:5000';
+const mode: string = import.meta.env.MODE;
+
+export const BASE_URL =
+  mode === 'production' ? 'https://twitter-clone-back-end.up.railway.app' : 'http://localhost:3000';
 
 export enum TypingSvg {
   guccitterIsWhat = 'https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&duration=3000&repeat=false&color=34495e&multiline=true&width=350&height=100&lines=Guccitter+is+what%E2%80%99s+happening+;and+what+people+are+talking;+about+right+now.',

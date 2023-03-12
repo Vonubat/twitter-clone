@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 
 import { ReactComponent as Logo } from '../../assets/icons/logo.svg';
-import { MINUTE, Path } from '../../constants';
+import { Path } from '../../constants';
 import {
   setModalForm,
   useAppDispatch,
@@ -16,9 +16,7 @@ import { Loading } from '../ui/indicators/Loading';
 export const Header = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { owner } = useAppSelector(userSelector);
-  const { isLoading, isSuccess, isError } = useVerifyUserQuery(null, {
-    pollingInterval: MINUTE,
-  });
+  const { isLoading, isSuccess, isError } = useVerifyUserQuery(null);
   const [logOut] = useLogoutUserMutation();
 
   const handleLogIn = (): void => {

@@ -23,19 +23,15 @@ export const authApi = createApi({
         };
       },
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        try {
-          const { data: newUser } = await queryFulfilled;
+        const { data: newUser } = await queryFulfilled;
 
-          dispatch(setCurrentUser(newUser));
-          dispatch(setOwner(newUser));
-          dispatch(
-            usersApi.util.updateQueryData('getAllUsers', undefined, (draft) => {
-              draft.push(newUser);
-            }),
-          );
-        } catch (e) {
-          console.error(e);
-        }
+        dispatch(setCurrentUser(newUser));
+        dispatch(setOwner(newUser));
+        dispatch(
+          usersApi.util.updateQueryData('getAllUsers', undefined, (draft) => {
+            draft.push(newUser);
+          }),
+        );
       },
     }),
     loginUser: builder.mutation<IUser, InputAuth>({
@@ -47,14 +43,10 @@ export const authApi = createApi({
         };
       },
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
+        const { data } = await queryFulfilled;
 
-          dispatch(setCurrentUser(data));
-          dispatch(setOwner(data));
-        } catch (e) {
-          console.error(e);
-        }
+        dispatch(setCurrentUser(data));
+        dispatch(setOwner(data));
       },
     }),
     logoutUser: builder.mutation<void, void>({
@@ -67,9 +59,8 @@ export const authApi = createApi({
       async onQueryStarted(_args, { dispatch }) {
         try {
           dispatch(setOwner(null));
-        } catch (e) {
+        } catch {
           dispatch(setOwner(null));
-          console.error(e);
         }
       },
     }),
@@ -84,9 +75,8 @@ export const authApi = createApi({
           const { data } = await queryFulfilled;
 
           dispatch(setOwner(data));
-        } catch (e) {
+        } catch {
           dispatch(setOwner(null));
-          console.error(e);
         }
       },
     }),

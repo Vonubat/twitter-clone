@@ -30,13 +30,9 @@ export const usersApi = createApi({
         },
       ],
       async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
+        const { data } = await queryFulfilled;
 
-          dispatch(setCurrentUser(data));
-        } catch (e) {
-          console.error(e);
-        }
+        dispatch(setCurrentUser(data));
       },
     }),
     changeAvatar: builder.mutation<IUser, InputGetUrl>({

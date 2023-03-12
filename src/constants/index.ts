@@ -1,5 +1,4 @@
 export const BASE_URL = 'http://localhost:5000';
-export const MINUTE = 60000;
 
 export enum TypingSvg {
   guccitterIsWhat = 'https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&duration=3000&repeat=false&color=34495e&multiline=true&width=350&height=100&lines=Guccitter+is+what%E2%80%99s+happening+;and+what+people+are+talking;+about+right+now.',
@@ -16,6 +15,18 @@ export enum ValidationMsg {
   nonValidUrl = 'Non-valid URL-address',
   unauthorized = 'Unauthorized',
   sessionHasExpired = 'Session has expired. Please, authenticate yourself',
+}
+
+export enum UserEvents {
+  loginUser = 'loginUser',
+  logoutUser = 'logoutUser',
+  registerUser = 'registerUser',
+}
+
+export enum SystemMsg {
+  loginUser = '👌 You have successfully logged in',
+  logoutUser = '🦄 You have successfully logged out',
+  registerUser = '🏆 You have successfully registered',
 }
 
 export enum Path {

@@ -13,7 +13,7 @@ export const Tweet = ({ tweet }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const { currentUser: user } = useAppSelector(userSelector);
 
-  const handleTweetClick = () => {
+  const handleTweetClick = (): void => {
     dispatch(setModalTweet(tweet));
   };
 

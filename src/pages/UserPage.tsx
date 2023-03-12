@@ -7,8 +7,8 @@ import { Path } from '../constants';
 import { useAppSelector, useGetListOfUserTweetsQuery, useGetUserQuery, userSelector } from '../redux';
 
 export const UserPage = (): JSX.Element => {
-  const { username } = useParams();
   const navigate = useNavigate();
+  const { username } = useParams();
   const { owner } = useAppSelector(userSelector);
   const { data: user, isError } = useGetUserQuery(username as string, { refetchOnMountOrArgChange: true });
   const { data: tweets } = useGetListOfUserTweetsQuery(user?.userId ?? skipToken);

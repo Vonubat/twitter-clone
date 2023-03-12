@@ -3,12 +3,13 @@ import { MouseEvent } from 'react';
 import { ReactComponent as Like } from '../../assets/icons/like.svg';
 import {
   setModalForm,
+  useAddRemoveLikeMutation,
   useAppDispatch,
   useAppSelector,
   useGetLikesAndUsersOnCertainTweetQuery,
   userSelector,
 } from '../../redux';
-import { ITweet } from '../../types';
+import { ILike, ITweet } from '../../types';
 
 import { Loading } from './indicators/Loading';
 
@@ -18,18 +19,19 @@ type Props = {
 
 export const LikeBtn = ({ tweet }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
+  const { owner } = useAppSelector(userSelector);
   const { tweetId } = tweet;
   const { data: likes, isLoading } = useGetLikesAndUsersOnCertainTweetQuery(tweetId);
-  const { owner } = useAppSelector(userSelector);
+  const [addRemoveLike] = useAddRemoveLikeMutation();
 
-  const handleAnonymousClickToLike = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleAnonymousClickToLike = (e: MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
     dispatch(setModalForm({ type: 'signup' }));
   };
 
-  const handleSignedClickToLike = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleSignedClickToLike = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.stopPropagation();
-    // likeTweet({ currentUser, currentTweetIndex });
+    await addRemoveLike({ tweetId });
   };
 
   const checkIsOwnerLikePresent = (): boolean => {
@@ -37,11 +39,19 @@ export const LikeBtn = ({ tweet }: Props): JSX.Element => {
       return false;
     }
 
-    // const ownerLike: ILike | undefined = currentUser.likes.find((like) => userId === ownerId);
+    if (likes) {
+      const ownerLike: ILike | undefined = likes.find(({ user }) => {
+        if (user) {
+          return user.userId === owner.userId;
+        }
 
-    // if (!ownerLike) {
-    //   return false;
-    // }
+        return false;
+      });
+
+      if (!ownerLike) {
+        return false;
+      }
+    }
 
     return true;
   };

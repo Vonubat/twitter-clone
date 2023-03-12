@@ -10,7 +10,7 @@ import { Loading } from './indicators/Loading';
 
 export const Search = (): JSX.Element => {
   const { data: users, isLoading } = useGetAllUsersQuery();
-  const [foundedUsers, setFoundedUsers] = useState<Omit<IUser, 'tweets' | 'likes'>[]>([]);
+  const [foundedUsers, setFoundedUsers] = useState<IUser[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const debouncedSearchValue = useDebounce<string>(searchValue);
 
@@ -33,7 +33,6 @@ export const Search = (): JSX.Element => {
 
       setFoundedUsers(filteredUsers);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchValue, users]);
 

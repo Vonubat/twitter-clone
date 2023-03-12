@@ -45,7 +45,10 @@ export const ModalTweet = (): JSX.Element => {
   };
 
   const handleDeleteTweet = async (): Promise<void> => {
-    await deleteTweet(tweetId);
+    if (tweetId) {
+      await deleteTweet(tweetId);
+    }
+
     dispatch(setModalTweet(null));
   };
 

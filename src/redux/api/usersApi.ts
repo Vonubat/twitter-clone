@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { BASE_URL } from '../../constants';
-import { InputGetUrl, IUser } from '../../types';
+import { FollowUnfollowDto, IFollower, IFollowing, InputGetUrl, IUser } from '../../types';
 import { setCurrentUser } from '../slices/userSlice';
 
 export const usersApi = createApi({
@@ -56,7 +56,40 @@ export const usersApi = createApi({
       },
       invalidatesTags: ['User'],
     }),
+    getAllFollowings: builder.query<IFollowing[], void>({
+      query: () => '/follow/followings',
+    }),
+    getAllFollowers: builder.query<IFollower[], void>({
+      query: () => '/follow/followers',
+    }),
+    followUser: builder.mutation<IFollowing[], FollowUnfollowDto>({
+      query: (data) => {
+        return {
+          url: '/follow',
+          method: 'POST',
+          body: data,
+        };
+      },
+    }),
+    unfollowUser: builder.mutation<IFollowing[], FollowUnfollowDto>({
+      query: (data) => {
+        return {
+          url: '/unfollow',
+          method: 'POST',
+          body: data,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetAllUsersQuery, useGetUserQuery, useChangeAvatarMutation, useChangeBgImageMutation } = usersApi;
+export const {
+  useGetAllUsersQuery,
+  useGetUserQuery,
+  useChangeAvatarMutation,
+  useChangeBgImageMutation,
+  useFollowUserMutation,
+  useUnfollowUserMutation,
+  useGetAllFollowersQuery,
+  useGetAllFollowingsQuery,
+} = usersApi;

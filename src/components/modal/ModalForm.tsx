@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Modal from 'react-overlays/cjs/Modal';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
+import defaultAvatar from '../../assets/default_avatar.png';
 import closeBtn from '../../assets/icons/close.png';
 import { ValidationMsg } from '../../constants';
 import {
@@ -13,8 +14,12 @@ import {
   useChangeAvatarMutation,
   useChangeBgImageMutation,
   useCreateNewTweetMutation,
+  useFollowUserMutation,
+  useGetAllFollowersQuery,
+  useGetAllFollowingsQuery,
   useLoginUserMutation,
   useRegisterUserMutation,
+  userSelector,
   useUpdateTweetMutation,
 } from '../../redux';
 import { CustomFormInputs } from '../../types';
@@ -28,6 +33,7 @@ export const ModalForm = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { modalForm } = useAppSelector(modalSelector);
+  const { owner: ownerOfPage } = useAppSelector(userSelector);
   const { type } = modalForm || {};
   const [logIn] = useLoginUserMutation();
   const [signUp] = useRegisterUserMutation();
@@ -35,6 +41,9 @@ export const ModalForm = (): JSX.Element => {
   const [changeBgImage] = useChangeBgImageMutation();
   const [createNewTweet] = useCreateNewTweetMutation();
   const [updateTweet] = useUpdateTweetMutation();
+  const { data: allFollowersUsers } = useGetAllFollowersQuery();
+  const { data: allFollowingUsers, refetch: fetchFollowingUsers } = useGetAllFollowingsQuery();
+  const [followUser] = useFollowUserMutation();
   const form = useForm<CustomFormInputs>();
   const {
     handleSubmit,
@@ -168,6 +177,15 @@ export const ModalForm = (): JSX.Element => {
     }
   }, [modalForm, setValue, type]);
 
+  const handleFollow = async (userId: string): Promise<void> => {
+    await followUser({ targetUserId: userId });
+    await fetchFollowingUsers();
+  };
+
+  useEffect(() => {
+    fetchFollowingUsers();
+  }, [ownerOfPage, fetchFollowingUsers]);
+
   return (
     <Modal
       className={`modal fixed top-1/2 left-1/2 z-50 flex ${
@@ -185,6 +203,7 @@ export const ModalForm = (): JSX.Element => {
             {type === 'newTweet' && 'Create new tweet'}
             {type === 'editTweet' && 'Edit your tweet'}
             {(type === 'avatar' || type === 'cover') && `Paste URL for ${type} image`}
+            {type === 'followers' && 'People who follow you'}
           </div>
           {type === 'signup' && (
             <button
@@ -211,19 +230,56 @@ export const ModalForm = (): JSX.Element => {
           {(type === 'newTweet' || type === 'editTweet') && (
             <InputForm form={form} name="contentTextarea" type="text" placeholder="Write a tweet..." />
           )}
-          <Button
-            externalStyle="mt-3 self-center"
-            size="large"
-            type="submit"
-            color="solid"
-            disabled={!isDirty || Boolean(Object.keys(errors).length)}
-          >
-            {type === 'login' && 'Log In'}
-            {type === 'signup' && 'Sign Up'}
-            {type === 'newTweet' && 'Create tweet'}
-            {type === 'editTweet' && 'Edit tweet'}
-            {(type === 'avatar' || type === 'cover') && `Change ${type}`}
-          </Button>
+          {type === 'followers' &&
+            allFollowersUsers?.map((user) => {
+              const isOwnerFollowing = allFollowingUsers?.some((followingUser) => followingUser.userId === user.userId);
+
+              // console.log('Followings', allFollowingUsers);
+              // console.log('Followers', allFollowersUsers);
+
+              return (
+                <div key={user.userId} className="my-2 flex justify-between rounded-md hover:bg-blue-100">
+                  <NavLink
+                    className="flex items-center px-2 py-2 text-gray-700 hover:text-blue-400"
+                    key={user.userId}
+                    to={`/${user.username}`}
+                    onClick={() => handleClose()}
+                  >
+                    <img
+                      className="h-10 w-10 rounded-full object-cover"
+                      src={user.avatar || defaultAvatar}
+                      alt="Rounded avatar"
+                    />
+                    <div className="flex-grow px-2 font-medium">{`${user.firstName} ${user.lastName} (@${user.username})`}</div>
+                  </NavLink>
+                  <Button
+                    externalStyle="self-center"
+                    size="large"
+                    type="submit"
+                    color="solid"
+                    disabled={isOwnerFollowing}
+                    onClick={isOwnerFollowing ? undefined : () => handleFollow(user.userId)}
+                  >
+                    {isOwnerFollowing ? 'Following' : 'Follow back'}
+                  </Button>
+                </div>
+              );
+            })}
+          {type !== 'followers' && (
+            <Button
+              externalStyle="mt-3 self-center"
+              size="large"
+              type="submit"
+              color="solid"
+              disabled={!isDirty || Boolean(Object.keys(errors).length)}
+            >
+              {type === 'login' && 'Log In'}
+              {type === 'signup' && 'Sign Up'}
+              {type === 'newTweet' && 'Create tweet'}
+              {type === 'editTweet' && 'Edit tweet'}
+              {(type === 'avatar' || type === 'cover') && `Change ${type}`}
+            </Button>
+          )}
         </form>
         <button className="button__close absolute -top-6 -right-6 h-5 w-5" onClick={handleClose}>
           <img src={closeBtn} alt="close btn" />

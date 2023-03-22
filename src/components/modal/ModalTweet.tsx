@@ -1,4 +1,5 @@
 import Modal from 'react-overlays/cjs/Modal';
+import { NavLink } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 import defaultAvatar from '../../assets/default_avatar.png';
@@ -23,10 +24,12 @@ import { Backdrop } from './Backdrop';
 export const ModalTweet = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { modalTweet } = useAppSelector(modalSelector);
-  const { currentUser, owner } = useAppSelector(userSelector);
-  const { avatar, firstName, lastName, username, userId } = currentUser || {};
-  const { tweetId, text } = modalTweet || {};
-  const { data: likes, isLoading: isLoadingLikes } = useGetLikesAndUsersOnCertainTweetQuery(tweetId ?? skipToken);
+  const { owner } = useAppSelector(userSelector);
+  const { tweetId, text, user } = modalTweet || {};
+  const { avatar, firstName, lastName, username, userId } = user || {};
+  const { data: likes, isLoading: isLoadingLikes } = useGetLikesAndUsersOnCertainTweetQuery(tweetId ?? skipToken, {
+    skip: !modalTweet,
+  });
   const isOwnerPage = userId === owner?.userId;
   const [deleteTweet] = useDeleteTweetMutation();
 
@@ -61,15 +64,17 @@ export const ModalTweet = (): JSX.Element => {
       renderBackdrop={Backdrop}
     >
       <>
-        <div className="modal__header w-full">
-          <div className="modal__title flex gap-5">
-            <img className="h-12 w-12 shrink-0 rounded-full" src={avatar || defaultAvatar} alt="Avatar" />
-            <div className="flex flex-col">
-              <h3 className="text-lg font-semibold text-black">{`${firstName} ${lastName}`}</h3>
-              <span className="text-black opacity-50">{`@${username}`}</span>
+        <NavLink to={`/${username}`} onClick={handleClose}>
+          <div className="modal__header w-full p-2 hover:bg-blue-100">
+            <div className="modal__title flex gap-5">
+              <img className="h-12 w-12 shrink-0 rounded-full" src={avatar || defaultAvatar} alt="Avatar" />
+              <div className="flex flex-col">
+                <h3 className="text-lg font-semibold text-black hover:text-blue-400">{`${firstName} ${lastName}`}</h3>
+                <span className="text-black opacity-50">{`@${username}`}</span>
+              </div>
             </div>
           </div>
-        </div>
+        </NavLink>
         <div className="modal__desc mt-5 flex max-h-[250px] w-full overflow-auto">
           <span className="break-all text-2xl text-black">{text}</span>
         </div>

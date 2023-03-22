@@ -1,6 +1,14 @@
+import { useEffect } from 'react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 
-import { setModalForm, useAppDispatch, useAppSelector, useGetListOfUserTweetsQuery, userSelector } from '../../redux';
+import {
+  setModalForm,
+  useAppDispatch,
+  useAppSelector,
+  useGetAllFollowersQuery,
+  useGetListOfUserTweetsQuery,
+  userSelector,
+} from '../../redux';
 import { IUser } from '../../types';
 
 type Props = {
@@ -11,7 +19,14 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const { owner, currentUser } = useAppSelector(userSelector);
   const { data: tweets } = useGetListOfUserTweetsQuery(currentUser?.userId ?? skipToken);
+  const { data: allFollowersUsers, refetch } = useGetAllFollowersQuery();
   const isOwnerPage = owner?.userId === user.userId;
+
+  useEffect(() => {
+    if (owner) {
+      refetch();
+    }
+  }, [owner, refetch]);
 
   return (
     <div className="flex h-[50px] w-full items-center bg-white">
@@ -20,6 +35,15 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
           <span className="font-medium text-black text-opacity-50">Tweets</span>
           <span className="tweets-counter font-semibold text-sky-500">{tweets?.length}</span>
         </div>
+        {isOwnerPage && (
+          <button
+            className="tweets-btn__change-cover min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
+            onClick={() => dispatch(setModalForm({ type: 'followers' }))}
+          >
+            <p>Followers</p>
+            <p>{allFollowersUsers?.length}</p>
+          </button>
+        )}
         {isOwnerPage && (
           <button
             className="tweets-btn__add w-full min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"

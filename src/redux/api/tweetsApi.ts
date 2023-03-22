@@ -62,4 +62,5 @@ export const {
   useCreateNewTweetMutation,
   useUpdateTweetMutation,
   useDeleteTweetMutation,
+  useLazyGetListOfUserTweetsQuery,
 } = tweetsApi;

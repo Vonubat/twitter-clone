@@ -1,20 +1,20 @@
 import defaultAvatar from '../../assets/default_avatar.png';
-import { setModalTweet, useAppDispatch, useAppSelector, userSelector } from '../../redux';
-import { ITweet } from '../../types';
+import { setModalTweet, useAppDispatch } from '../../redux';
+import { ITweet, IUser } from '../../types';
 import { getTimeForTweet } from '../../utils';
 
 import { LikeBtn } from './LikeBtn';
 
 type Props = {
   tweet: ITweet;
+  user: IUser;
 };
 
-export const Tweet = ({ tweet }: Props): JSX.Element => {
+export const Tweet = ({ tweet, user }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { currentUser: user } = useAppSelector(userSelector);
 
   const handleTweetClick = (): void => {
-    dispatch(setModalTweet(tweet));
+    dispatch(setModalTweet({ ...tweet, user }));
   };
 
   return (

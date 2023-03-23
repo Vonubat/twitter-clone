@@ -2,13 +2,7 @@ import { useEffect, useState } from 'react';
 
 import calendarIcon from '../../assets/icons/calendar.png';
 import locationIcon from '../../assets/icons/location.png';
-import {
-  useAppSelector,
-  useFollowUserMutation,
-  useGetAllFollowingsQuery,
-  userSelector,
-  useUnfollowUserMutation,
-} from '../../redux';
+import { useAppSelector, useFollowUserMutation, userSelector, useUnfollowUserMutation } from '../../redux';
 import { IUser } from '../../types';
 import { getTimeForUserInfo } from '../../utils';
 
@@ -19,8 +13,7 @@ type Props = {
 };
 
 export const UserInfo = ({ user }: Props): JSX.Element => {
-  const { owner } = useAppSelector(userSelector);
-  const { data: allFollowingUsers, refetch } = useGetAllFollowingsQuery();
+  const { owner, followings } = useAppSelector(userSelector);
   const [followUser] = useFollowUserMutation();
   const [unfollowUser] = useUnfollowUserMutation();
   const [btnActionType, setBtnActionType] = useState<'Unfollow' | 'Follow'>('Follow');
@@ -29,21 +22,19 @@ export const UserInfo = ({ user }: Props): JSX.Element => {
 
   const handleFollow = async (): Promise<void> => {
     await followUser({ targetUserId: user.userId });
-    await refetch();
   };
 
   const handleUnfollow = async (): Promise<void> => {
     await unfollowUser({ targetUserId: user.userId });
-    await refetch();
   };
 
   useEffect(() => {
-    if (owner && allFollowingUsers) {
-      const isAllreadyFollowing = allFollowingUsers.some((followingUser) => followingUser.userId === user.userId);
+    if (owner && followings) {
+      const isAllreadyFollowing = followings.some((followingUser) => followingUser.userId === user.userId);
 
       isAllreadyFollowing ? setBtnActionType('Unfollow') : setBtnActionType('Follow');
     }
-  }, [owner, allFollowingUsers, user.userId]);
+  }, [followings, owner, user.userId]);
 
   return (
     <div className="user-info flex flex-col">

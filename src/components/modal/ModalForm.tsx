@@ -15,8 +15,6 @@ import {
   useChangeBgImageMutation,
   useCreateNewTweetMutation,
   useFollowUserMutation,
-  useGetAllFollowersQuery,
-  useGetAllFollowingsQuery,
   useLoginUserMutation,
   useRegisterUserMutation,
   userSelector,
@@ -34,7 +32,7 @@ export const ModalForm = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { modalForm } = useAppSelector(modalSelector);
-  const { owner: ownerOfPage } = useAppSelector(userSelector);
+  const { followings, followers } = useAppSelector(userSelector);
   const { type } = modalForm || {};
   const [logIn] = useLoginUserMutation();
   const [signUp] = useRegisterUserMutation();
@@ -42,8 +40,6 @@ export const ModalForm = (): JSX.Element => {
   const [changeBgImage] = useChangeBgImageMutation();
   const [createNewTweet] = useCreateNewTweetMutation();
   const [updateTweet] = useUpdateTweetMutation();
-  const { data: allFollowersUsers } = useGetAllFollowersQuery();
-  const { data: allFollowingUsers, refetch: fetchFollowingUsers } = useGetAllFollowingsQuery();
   const [followUser] = useFollowUserMutation();
   const [unfollowUser] = useUnfollowUserMutation();
   const form = useForm<CustomFormInputs>();
@@ -181,17 +177,10 @@ export const ModalForm = (): JSX.Element => {
 
   const handleFollow = async (userId: string): Promise<void> => {
     await followUser({ targetUserId: userId });
-    await fetchFollowingUsers();
   };
-
   const handleUnfollow = async (userId: string): Promise<void> => {
     await unfollowUser({ targetUserId: userId });
-    await fetchFollowingUsers();
   };
-
-  useEffect(() => {
-    fetchFollowingUsers();
-  }, [ownerOfPage, fetchFollowingUsers]);
 
   return (
     <Modal
@@ -238,30 +227,36 @@ export const ModalForm = (): JSX.Element => {
             <InputForm form={form} name="contentTextarea" type="text" placeholder="Write a tweet..." />
           )}
           {type === 'followers' &&
-            allFollowersUsers?.map((user) => {
-              const isOwnerFollowing = allFollowingUsers?.some((followingUser) => followingUser.userId === user.userId);
+            followers.map((followerUser) => {
+              const isOwnerFollowing = followings?.some(
+                (followingUser) => followingUser.userId === followerUser.userId,
+              );
 
               return (
-                <div key={user.userId} className="my-2 flex justify-between rounded-md hover:bg-blue-100">
+                <div key={followerUser.userId} className="my-2 flex justify-between rounded-md hover:bg-blue-100">
                   <NavLink
                     className="flex items-center px-2 py-2 text-gray-700 hover:text-blue-400"
-                    key={user.userId}
-                    to={`/${user.username}`}
+                    key={followerUser.userId}
+                    to={`/${followerUser.username}`}
                     onClick={() => handleClose()}
                   >
                     <img
                       className="h-10 w-10 rounded-full object-cover"
-                      src={user.avatar || defaultAvatar}
+                      src={followerUser.avatar || defaultAvatar}
                       alt="Rounded avatar"
                     />
-                    <div className="flex-grow px-2 font-medium">{`${user.firstName} ${user.lastName} (@${user.username})`}</div>
+                    <div className="flex-grow px-2 font-medium">{`${followerUser.firstName} ${followerUser.lastName} (@${followerUser.username})`}</div>
                   </NavLink>
                   <Button
                     externalStyle="self-center"
                     size="large"
                     type="submit"
                     color="solid"
-                    onClick={isOwnerFollowing ? () => handleUnfollow(user.userId) : () => handleFollow(user.userId)}
+                    onClick={
+                      isOwnerFollowing
+                        ? () => handleUnfollow(followerUser.userId)
+                        : () => handleFollow(followerUser.userId)
+                    }
                   >
                     {isOwnerFollowing ? 'Unfollow' : 'Follow back'}
                   </Button>

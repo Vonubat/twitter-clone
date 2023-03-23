@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { BASE_URL } from '../../constants';
 import { InputAuth, IUser } from '../../types';
-import { setCurrentUser, setOwner } from '../slices/userSlice';
+import { setCurrentUser, setFollowers, setFollowings, setOwner } from '../slices/userSlice';
 
 import { usersApi } from './usersApi';
 
@@ -60,8 +60,12 @@ export const authApi = createApi({
       async onQueryStarted(_args, { dispatch }) {
         try {
           dispatch(setOwner(null));
+          dispatch(setFollowings([]));
+          dispatch(setFollowers([]));
         } catch {
           dispatch(setOwner(null));
+          dispatch(setFollowings([]));
+          dispatch(setFollowers([]));
         }
       },
     }),
@@ -78,6 +82,8 @@ export const authApi = createApi({
           dispatch(setOwner(data));
         } catch {
           dispatch(setOwner(null));
+          dispatch(setFollowings([]));
+          dispatch(setFollowers([]));
         }
       },
     }),

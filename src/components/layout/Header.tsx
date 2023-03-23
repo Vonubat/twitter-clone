@@ -31,6 +31,8 @@ export const Header = (): JSX.Element => {
     await logOut();
   };
 
+  const isLoggedIn = !!owner;
+
   return (
     <header className="flex h-12 w-full items-center justify-around">
       <div className="flex gap-8">
@@ -40,18 +42,27 @@ export const Header = (): JSX.Element => {
             <h1 className="font-semibold text-sky-500">Guccitter</h1>
           </div>
         </NavLink>
-        <NavLink to={Path.feedPage}>
-          <div className="logo__wrapper flex gap-3">
-            <h1 className="font-semibold text-sky-500">Feed</h1>
-          </div>
-        </NavLink>
+        {isLoggedIn && (
+          <>
+            <NavLink to={`/${owner?.username}`}>
+              <div className="logo__wrapper flex gap-3">
+                <h1 className="font-semibold text-sky-500">Profile</h1>
+              </div>
+            </NavLink>
+            <NavLink to={Path.feedPage}>
+              <div className="logo__wrapper flex gap-3">
+                <h1 className="font-semibold text-sky-500">Feed</h1>
+              </div>
+            </NavLink>
+          </>
+        )}
       </div>
       <div className="button__wrapper flex gap-3">
         {isLoading && <Loading type="content" />}
         {(isSuccess || isError) && (
           <>
             <Button
-              externalStyle={owner ? 'invisible' : ' visible'}
+              externalStyle={owner ? 'invisible' : 'visible'}
               size="small"
               type="button"
               color="transparent"

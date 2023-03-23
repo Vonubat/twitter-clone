@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { BASE_URL } from '../../constants';
 import { FollowUnfollowDto, IFollower, IFollowing, InputGetUrl, IUser } from '../../types';
-import { setCurrentUser } from '../slices/userSlice';
+import { setCurrentUser, setFollowers, setFollowings } from '../slices/userSlice';
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -58,9 +58,20 @@ export const usersApi = createApi({
     }),
     getAllFollowings: builder.query<IFollowing[], void>({
       query: () => '/follow/followings',
+
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        const { data: allFollowings } = await queryFulfilled;
+
+        dispatch(setFollowings(allFollowings));
+      },
     }),
     getAllFollowers: builder.query<IFollower[], void>({
       query: () => '/follow/followers',
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        const { data: allFollowers } = await queryFulfilled;
+
+        dispatch(setFollowers(allFollowers));
+      },
     }),
     followUser: builder.mutation<IFollowing[], FollowUnfollowDto>({
       query: (data) => {
@@ -70,6 +81,16 @@ export const usersApi = createApi({
           body: data,
         };
       },
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        const { data: allFollowings } = await queryFulfilled;
+
+        dispatch(setFollowings(allFollowings));
+        dispatch(
+          usersApi.util.updateQueryData('getAllFollowings', undefined, () => {
+            return allFollowings;
+          }),
+        );
+      },
     }),
     unfollowUser: builder.mutation<IFollowing[], FollowUnfollowDto>({
       query: (data) => {
@@ -78,6 +99,16 @@ export const usersApi = createApi({
           method: 'POST',
           body: data,
         };
+      },
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        const { data: allFollowings } = await queryFulfilled;
+
+        dispatch(setFollowings(allFollowings));
+        dispatch(
+          usersApi.util.updateQueryData('getAllFollowings', undefined, () => {
+            return allFollowings;
+          }),
+        );
       },
     }),
   }),

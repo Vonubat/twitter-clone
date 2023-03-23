@@ -1,14 +1,6 @@
-import { useEffect } from 'react';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 
-import {
-  setModalForm,
-  useAppDispatch,
-  useAppSelector,
-  useGetAllFollowersQuery,
-  useGetListOfUserTweetsQuery,
-  userSelector,
-} from '../../redux';
+import { setModalForm, useAppDispatch, useAppSelector, useGetListOfUserTweetsQuery, userSelector } from '../../redux';
 import { IUser } from '../../types';
 
 type Props = {
@@ -17,16 +9,9 @@ type Props = {
 
 export const ControlBar = ({ user }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-  const { owner, currentUser } = useAppSelector(userSelector);
+  const { owner, currentUser, followers } = useAppSelector(userSelector);
   const { data: tweets } = useGetListOfUserTweetsQuery(currentUser?.userId ?? skipToken);
-  const { data: allFollowersUsers, refetch } = useGetAllFollowersQuery();
   const isOwnerPage = owner?.userId === user.userId;
-
-  useEffect(() => {
-    if (owner) {
-      refetch();
-    }
-  }, [owner, refetch]);
 
   return (
     <div className="flex h-[50px] w-full items-center bg-white">
@@ -41,7 +26,7 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
             onClick={() => dispatch(setModalForm({ type: 'followers' }))}
           >
             <p>Followers</p>
-            <p>{allFollowersUsers?.length}</p>
+            <p>{followers.length}</p>
           </button>
         )}
         {isOwnerPage && (

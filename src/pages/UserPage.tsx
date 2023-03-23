@@ -4,7 +4,14 @@ import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 import { Avatar, Banner, ControlBar, Cover, Loading, Tweet, UserInfo } from '../components';
 import { Path } from '../constants';
-import { useAppSelector, useGetListOfUserTweetsQuery, useGetUserQuery, userSelector } from '../redux';
+import {
+  useAppSelector,
+  useGetAllFollowersQuery,
+  useGetAllFollowingsQuery,
+  useGetListOfUserTweetsQuery,
+  useGetUserQuery,
+  userSelector,
+} from '../redux';
 
 export const UserPage = (): JSX.Element => {
   const navigate = useNavigate();
@@ -12,12 +19,25 @@ export const UserPage = (): JSX.Element => {
   const { owner } = useAppSelector(userSelector);
   const { data: user, isError } = useGetUserQuery(username as string, { refetchOnMountOrArgChange: true });
   const { data: tweets } = useGetListOfUserTweetsQuery(user?.userId ?? skipToken);
+  const { refetch: fetchFollowersUsers } = useGetAllFollowersQuery(undefined, {
+    skip: !owner,
+  });
+  const { refetch: fetchFollowingUsers } = useGetAllFollowingsQuery(undefined, {
+    skip: !owner,
+  });
 
   useEffect(() => {
     if (isError) {
       navigate(Path.userNotFound);
     }
   }, [isError, navigate]);
+
+  useEffect(() => {
+    if (owner) {
+      fetchFollowersUsers();
+      fetchFollowingUsers();
+    }
+  }, [fetchFollowersUsers, fetchFollowingUsers, owner]);
 
   return user ? (
     <main className="user-page__wrapper flex grow animate-bg flex-col bg-gradient-to-r from-slate-50 to-slate-300 bg-[length:200%_200%]">

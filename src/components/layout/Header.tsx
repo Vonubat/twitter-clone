@@ -33,12 +33,19 @@ export const Header = (): JSX.Element => {
 
   return (
     <header className="flex h-12 w-full items-center justify-around">
-      <NavLink to={Path.welcomePage}>
-        <div className="logo__wrapper flex gap-3">
-          <Logo className="h-7 w-7" />
-          <h1 className="font-semibold text-sky-500">Guccitter</h1>
-        </div>
-      </NavLink>
+      <div className="flex gap-8">
+        <NavLink to={Path.welcomePage}>
+          <div className="logo__wrapper flex gap-3">
+            <Logo className="h-7 w-7" />
+            <h1 className="font-semibold text-sky-500">Guccitter</h1>
+          </div>
+        </NavLink>
+        <NavLink to={Path.feedPage}>
+          <div className="logo__wrapper flex gap-3">
+            <h1 className="font-semibold text-sky-500">Feed</h1>
+          </div>
+        </NavLink>
+      </div>
       <div className="button__wrapper flex gap-3">
         {isLoading && <Loading type="content" />}
         {(isSuccess || isError) && (

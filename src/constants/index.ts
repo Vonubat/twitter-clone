@@ -36,5 +36,6 @@ export enum Path {
   welcomePage = '/',
   userPage = '/:username',
   userNotFound = 'User not found',
+  feedPage = '/feed',
   any = '*',
 }

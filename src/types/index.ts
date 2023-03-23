@@ -25,11 +25,15 @@ export interface ITweet {
 }
 
 export type ModalForm =
-  | { type: 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' }
+  | { type: 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' | 'followers' }
   | { type: 'editTweet'; tweet: ModalTweet }
   | null;
 
-export type ModalTweet = ITweet | null;
+interface IModalTweet extends ITweet {
+  user: IUser;
+}
+
+export type ModalTweet = IModalTweet | null;
 
 export type InputAuth = {
   username: string;
@@ -64,3 +68,13 @@ export function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryEr
 export function isGenericResponse(data: unknown): data is IGenericResponse {
   return typeof data === 'object' && data != null && ('message' in data || 'error' in data);
 }
+
+export interface IFollowing extends IUser {
+  tweets?: ITweet[];
+}
+
+export interface IFollower extends IUser {}
+
+export type FollowUnfollowDto = {
+  targetUserId: string;
+};

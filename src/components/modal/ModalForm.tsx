@@ -20,6 +20,7 @@ import {
   useLoginUserMutation,
   useRegisterUserMutation,
   userSelector,
+  useUnfollowUserMutation,
   useUpdateTweetMutation,
 } from '../../redux';
 import { CustomFormInputs } from '../../types';
@@ -44,6 +45,7 @@ export const ModalForm = (): JSX.Element => {
   const { data: allFollowersUsers } = useGetAllFollowersQuery();
   const { data: allFollowingUsers, refetch: fetchFollowingUsers } = useGetAllFollowingsQuery();
   const [followUser] = useFollowUserMutation();
+  const [unfollowUser] = useUnfollowUserMutation();
   const form = useForm<CustomFormInputs>();
   const {
     handleSubmit,
@@ -182,6 +184,11 @@ export const ModalForm = (): JSX.Element => {
     await fetchFollowingUsers();
   };
 
+  const handleUnfollow = async (userId: string): Promise<void> => {
+    await unfollowUser({ targetUserId: userId });
+    await fetchFollowingUsers();
+  };
+
   useEffect(() => {
     fetchFollowingUsers();
   }, [ownerOfPage, fetchFollowingUsers]);
@@ -189,7 +196,7 @@ export const ModalForm = (): JSX.Element => {
   return (
     <Modal
       className={`modal fixed top-1/2 left-1/2 z-50 flex ${
-        type === 'signup' || type === 'login' ? 'w-[300px]' : 'w-full min-w-[300px] max-w-[70vw]'
+        type === 'signup' || type === 'login' ? 'w-[300px]' : 'w-full min-w-[300px] max-w-[700px]'
       } -translate-y-1/2 -translate-x-1/2 flex-col items-center rounded-md bg-white p-7 shadow-md outline-none`}
       show={!!modalForm}
       onHide={handleClose}
@@ -234,9 +241,6 @@ export const ModalForm = (): JSX.Element => {
             allFollowersUsers?.map((user) => {
               const isOwnerFollowing = allFollowingUsers?.some((followingUser) => followingUser.userId === user.userId);
 
-              // console.log('Followings', allFollowingUsers);
-              // console.log('Followers', allFollowersUsers);
-
               return (
                 <div key={user.userId} className="my-2 flex justify-between rounded-md hover:bg-blue-100">
                   <NavLink
@@ -257,10 +261,9 @@ export const ModalForm = (): JSX.Element => {
                     size="large"
                     type="submit"
                     color="solid"
-                    disabled={isOwnerFollowing}
-                    onClick={isOwnerFollowing ? undefined : () => handleFollow(user.userId)}
+                    onClick={isOwnerFollowing ? () => handleUnfollow(user.userId) : () => handleFollow(user.userId)}
                   >
-                    {isOwnerFollowing ? 'Following' : 'Follow back'}
+                    {isOwnerFollowing ? 'Unfollow' : 'Follow back'}
                   </Button>
                 </div>
               );

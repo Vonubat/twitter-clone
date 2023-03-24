@@ -28,7 +28,7 @@ export const Tweet = ({ tweet, user }: Props): JSX.Element => {
           <span className="whitespace-nowrap text-black opacity-50">{getTimeForTweet(tweet)}</span>
         </div>
         <span className="tweet-content__content mt-1 break-all">{tweet.text}</span>
-        <LikeBtn tweet={tweet} />
+        <LikeBtn creatorOfTweet={user} tweet={tweet} />
       </article>
     </div>
   );

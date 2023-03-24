@@ -1,28 +1,21 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 
 import { ReactComponent as Like } from '../../assets/icons/like.svg';
-import {
-  setModalForm,
-  useAddRemoveLikeMutation,
-  useAppDispatch,
-  useAppSelector,
-  useGetLikesAndUsersOnCertainTweetQuery,
-  userSelector,
-} from '../../redux';
-import { ILike, ITweet } from '../../types';
-
-import { Loading } from './indicators/Loading';
+import { setModalForm, useAddRemoveLikeMutation, useAppDispatch, useAppSelector, userSelector } from '../../redux';
+import { ITweet, IUser } from '../../types';
 
 type Props = {
   tweet: ITweet;
+  creatorOfTweet: IUser;
 };
 
-export const LikeBtn = ({ tweet }: Props): JSX.Element => {
+export const LikeBtn = ({ tweet, creatorOfTweet }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const { owner } = useAppSelector(userSelector);
-  const { tweetId } = tweet;
-  const { data: likes, isLoading } = useGetLikesAndUsersOnCertainTweetQuery(tweetId);
+  const { tweetId, likes } = tweet;
+  const { userId } = creatorOfTweet;
   const [addRemoveLike] = useAddRemoveLikeMutation();
+  const [ownerLike, setOwnerLike] = useState<'fill-red-700' | 'fill-none'>('fill-none');
 
   const handleAnonymousClickToLike = (e: MouseEvent<HTMLButtonElement>): void => {
     e.stopPropagation();
@@ -31,41 +24,26 @@ export const LikeBtn = ({ tweet }: Props): JSX.Element => {
 
   const handleSignedClickToLike = async (e: MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.stopPropagation();
-    await addRemoveLike({ tweetId });
+    await addRemoveLike({ tweetId, userId });
   };
 
-  const checkIsOwnerLikePresent = (): boolean => {
-    if (!owner) {
-      return false;
-    }
-
-    if (likes) {
-      const ownerLike: ILike | undefined = likes.find(({ user }) => {
-        if (user) {
-          return user.userId === owner.userId;
-        }
-
-        return false;
+  useEffect(() => {
+    if (owner) {
+      const isOwnerLikePresent = likes.some(({ user }) => {
+        return user?.userId === owner.userId;
       });
 
-      if (!ownerLike) {
-        return false;
-      }
+      isOwnerLikePresent ? setOwnerLike('fill-red-700') : setOwnerLike('fill-none');
     }
-
-    return true;
-  };
+  }, [likes, owner]);
 
   return (
     <button
       className="tweet-content__likes mt-2 flex w-10 items-center gap-2 rounded-md p-1 hover:bg-sky-50"
       onClick={owner ? handleSignedClickToLike : handleAnonymousClickToLike}
     >
-      <Like className={`${checkIsOwnerLikePresent() ? 'fill-red-700' : 'fill-none'}`} />
-      <span className="select-none text-black opacity-50">
-        {isLoading && <Loading type="content" />}
-        {likes && likes.length}
-      </span>
+      <Like className={ownerLike} />
+      <span className="select-none text-black opacity-50">{likes && likes.length}</span>
     </button>
   );
 };

@@ -17,3 +17,14 @@
 .tweet {
   width: 500px;
 }
+
+@media (max-width: 767px) {
+  .user-info__menu {
+    display: inline-block;
+    z-index: 1;
+  }
+
+  .controls__menu {
+    display: none;
+  }
+}

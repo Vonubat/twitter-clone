@@ -1,15 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { IUser } from '../../types';
+import { IFollower, IFollowing, IUser } from '../../types';
 
 type UserState = {
   currentUser: IUser | null;
   owner: IUser | null;
+  followings: IFollowing[];
+  followers: IFollower[];
 };
 
 const initialState: UserState = {
   currentUser: null,
   owner: null,
+  followings: [],
+  followers: [],
 };
 
 const userSlice = createSlice({
@@ -22,11 +26,17 @@ const userSlice = createSlice({
     setOwner: (state, action: PayloadAction<IUser | null>) => {
       state.owner = action.payload;
     },
+    setFollowings: (state, action: PayloadAction<IFollowing[]>) => {
+      state.followings = action.payload;
+    },
+    setFollowers: (state, action: PayloadAction<IFollower[]>) => {
+      state.followers = action.payload;
+    },
   },
 });
 
 export default userSlice.reducer;
 
-export const { setCurrentUser, setOwner } = userSlice.actions;
+export const { setCurrentUser, setOwner, setFollowings, setFollowers } = userSlice.actions;
 
 export const userSelector = (state: { userStore: UserState }) => state.userStore;

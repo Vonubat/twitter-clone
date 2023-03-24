@@ -9,6 +9,7 @@ export interface IUser {
   lastName: string;
   location: string;
   joined: string;
+  banned?: IUser[]
 }
 
 export interface ILike {
@@ -26,7 +27,7 @@ export interface ITweet {
 }
 
 export type ModalForm =
-  | { type: 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' | 'followers' }
+  | { type: 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' | 'followers' | 'banned'}
   | { type: 'editTweet'; tweet: ModalTweet }
   | null;
 

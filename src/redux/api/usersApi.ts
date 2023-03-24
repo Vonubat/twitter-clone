@@ -111,10 +111,34 @@ export const usersApi = createApi({
         );
       },
     }),
+
+    banUser: builder.mutation<IUser[], {targetUserId: string}>({
+      query: (data) => {
+        return {
+          url: '/ban',
+          method: 'POST',
+          body: data,
+        };
+      },
+    }),
+    unBanUser: builder.mutation<IUser[], {targetUserId: string}>({
+      query: (data) => {
+        return {
+          url: '/unban',
+          method: 'POST',
+          body: data,
+        };
+      },
+    }),
+    getBannedUsers: builder.query<IUser[], void>({
+      query: () => '/ban/banned',
+    }),
     getFeedList: builder.query<IFollowing[], IUser | null>({
       query: () => '/feed/list',
     }),
   }),
+
+
 });
 
 export const {
@@ -127,4 +151,7 @@ export const {
   useGetAllFollowersQuery,
   useGetAllFollowingsQuery,
   useGetFeedListQuery,
+  useUnBanUserMutation,
+  useBanUserMutation,
+  useGetBannedUsersQuery
 } = usersApi;

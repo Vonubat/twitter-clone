@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 
 import calendarIcon from '../../assets/icons/calendar.png';
 import locationIcon from '../../assets/icons/location.png';
@@ -11,10 +11,11 @@ import {
   userSelector,
   useUnfollowUserMutation,
 } from '../../redux';
-import { IUser } from '../../types';
-import { getTimeForUserInfo } from '../../utils';
+import {IUser} from '../../types';
+import {getTimeForUserInfo} from '../../utils';
 
-import { Button } from './Button';
+import {Button} from './Button';
+import {useBanUserMutation, useGetBannedUsersQuery, useUnBanUserMutation} from "../../redux/api/usersApi";
 
 type Props = {
   user: IUser;
@@ -24,7 +25,17 @@ export const UserInfo = ({ user }: Props): JSX.Element => {
   const { owner, followings } = useAppSelector(userSelector);
   const [followUser] = useFollowUserMutation();
   const [unfollowUser] = useUnfollowUserMutation();
+
+  const { data: ownerBannedUsers, refetch } = useGetBannedUsersQuery();
+
   const [btnActionType, setBtnActionType] = useState<'Unfollow' | 'Follow'>('Follow');
+
+  const [unBanUser] = useUnBanUserMutation();
+  const [banUser] = useBanUserMutation();
+
+
+  const [btnType, setBtnType] = useState<'Unban' | 'Ban'>('Ban');
+  const [canShowFollow, setCanShowFollow] = useState<boolean>(true);
 
   const showHideBtn = (): boolean => Boolean(owner && owner.userId !== user.userId);
   const dispatch = useAppDispatch();
@@ -58,13 +69,26 @@ export const UserInfo = ({ user }: Props): JSX.Element => {
     await unfollowUser({ targetUserId: user.userId });
   };
 
-  useEffect(() => {
-    if (owner && followings) {
-      const isAllreadyFollowing = followings.some((followingUser) => followingUser.userId === user.userId);
+  const handleBan = async (): Promise<void> => {
+    await banUser({ targetUserId: user.userId });
+    refetch()
+  };
 
-      isAllreadyFollowing ? setBtnActionType('Unfollow') : setBtnActionType('Follow');
+  const handleUnBan = async (): Promise<void> => {
+    await unBanUser({ targetUserId: user.userId });
+    refetch()
+  };
+
+  useEffect(() => {
+    if (owner && followings && ownerBannedUsers) {
+      const isAlreadyFollowing = followings.some((followingUser) => followingUser.userId === user.userId);
+      const isAlreadyBanned = ownerBannedUsers.some(ownerBannedUser => ownerBannedUser.userId === user.userId)
+
+      isAlreadyFollowing ? setBtnActionType('Unfollow') : setBtnActionType('Follow');
+      isAlreadyBanned ? setBtnType('Unban') : setBtnType('Ban');
+      isAlreadyBanned ? setCanShowFollow(false) : setCanShowFollow(true);
     }
-  }, [followings, owner, user.userId]);
+  }, [followings, owner, user.userId, ownerBannedUsers]);
 
   return (
     <div className="user-info flex flex-col">
@@ -126,7 +150,7 @@ export const UserInfo = ({ user }: Props): JSX.Element => {
         <img src={locationIcon} alt="location icon" />
         <span className="font-medium text-black opacity-50">{user.location}</span>
       </div>
-      {showHideBtn() && (
+      {showHideBtn() && canShowFollow && (
         <Button
           size="small"
           type="button"
@@ -135,6 +159,17 @@ export const UserInfo = ({ user }: Props): JSX.Element => {
           onClick={btnActionType === 'Follow' ? handleFollow : handleUnfollow}
         >
           {btnActionType}
+        </Button>
+      )}
+      {showHideBtn() &&  (
+        <Button
+          size="small"
+          type="button"
+          color="solid"
+          externalStyle="self-center mt-4 w-44"
+          onClick={btnType === 'Ban' ? handleBan : handleUnBan}
+        >
+          {btnType}
         </Button>
       )}
     </div>

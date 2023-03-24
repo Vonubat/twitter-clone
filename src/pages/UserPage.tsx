@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { skipToken } from '@reduxjs/toolkit/dist/query';
 
@@ -26,6 +26,8 @@ export const UserPage = (): JSX.Element => {
     skip: !owner,
   });
 
+  const [showTweets, setShowTweets] = useState(true)
+
   useEffect(() => {
     if (isError) {
       navigate(Path.userNotFound);
@@ -39,6 +41,12 @@ export const UserPage = (): JSX.Element => {
     }
   }, [fetchFollowersUsers, fetchFollowingUsers, owner]);
 
+  useEffect(() => {
+   const isAlreadyBanned = user?.banned?.some(currentBannedUser => currentBannedUser.userId === owner?.userId)
+    isAlreadyBanned ? setShowTweets(false) : setShowTweets(true)
+
+  }, [user, owner]);
+
   return user ? (
     <main className="user-page__wrapper flex grow animate-bg flex-col bg-gradient-to-r from-slate-50 to-slate-300 bg-[length:200%_200%]">
       <div className="cover-avatar__wrapper relative">
@@ -51,7 +59,7 @@ export const UserPage = (): JSX.Element => {
           <UserInfo user={user} />
         </div>
         <div className="tweets__container ml-0 flex max-w-lg flex-col gap-px p-2 md:p-0 lg:ml-[10%]">
-          {user && tweets && tweets.map((tweet) => <Tweet user={user} key={tweet.tweetId} tweet={tweet} />)}
+          {user && tweets && showTweets && tweets.map((tweet) => <Tweet user={user} key={tweet.tweetId} tweet={tweet} />)}
         </div>
         <div className="banner__container hidden xl:block">{!owner && <Banner />}</div>
       </div>

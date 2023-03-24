@@ -32,7 +32,7 @@ export const ModalForm = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { modalForm } = useAppSelector(modalSelector);
-  const { followings, followers } = useAppSelector(userSelector);
+  const { followings, followers, owner } = useAppSelector(userSelector);
   const { type } = modalForm || {};
   const [logIn] = useLoginUserMutation();
   const [signUp] = useRegisterUserMutation();
@@ -200,6 +200,7 @@ export const ModalForm = (): JSX.Element => {
             {type === 'editTweet' && 'Edit your tweet'}
             {(type === 'avatar' || type === 'cover') && `Paste URL for ${type} image`}
             {type === 'followers' && 'People who follow you'}
+            {type === 'banned' && 'People who you banned'}
           </div>
           {type === 'signup' && (
             <button
@@ -263,7 +264,12 @@ export const ModalForm = (): JSX.Element => {
                 </div>
               );
             })}
-          {type !== 'followers' && (
+          {type === 'banned' &&
+            owner?.banned?.map((bannedUser) =>
+              <div key={bannedUser.username} className="flex-grow px-2 font-medium">{`${bannedUser.firstName} ${bannedUser.lastName} (@${bannedUser.username})`}</div>
+            )}
+
+          {type !== 'followers' && type !== 'banned' && (
             <Button
               externalStyle="mt-3 self-center"
               size="large"

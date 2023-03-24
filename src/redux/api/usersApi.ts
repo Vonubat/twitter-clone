@@ -111,6 +111,9 @@ export const usersApi = createApi({
         );
       },
     }),
+    getFeedList: builder.query<IFollowing[], IUser | null>({
+      query: () => '/feed/list',
+    }),
   }),
 });
 
@@ -123,4 +126,5 @@ export const {
   useUnfollowUserMutation,
   useGetAllFollowersQuery,
   useGetAllFollowingsQuery,
+  useGetFeedListQuery,
 } = usersApi;

@@ -9,7 +9,6 @@ export {
   useCreateNewTweetMutation,
   useDeleteTweetMutation,
   useGetListOfUserTweetsQuery,
-  useLazyGetListOfUserTweetsQuery,
   useUpdateTweetMutation,
 } from './api/tweetsApi';
 export {
@@ -19,6 +18,7 @@ export {
   useGetAllFollowersQuery,
   useGetAllFollowingsQuery,
   useGetAllUsersQuery,
+  useGetFeedListQuery,
   useGetUserQuery,
   useUnfollowUserMutation,
 } from './api/usersApi';

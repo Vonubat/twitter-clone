@@ -13,7 +13,7 @@ export interface IUser {
 
 export interface ILike {
   likeId: string;
-  user?: IUser;
+  user: IUser;
   tweet?: ITweet;
 }
 
@@ -21,6 +21,7 @@ export interface ITweet {
   tweetId: string;
   text: string;
   date: string;
+  likes: ILike[];
   user?: IUser;
 }
 
@@ -70,7 +71,7 @@ export function isGenericResponse(data: unknown): data is IGenericResponse {
 }
 
 export interface IFollowing extends IUser {
-  tweets?: ITweet[];
+  tweets: ITweet[];
 }
 
 export interface IFollower extends IUser {}

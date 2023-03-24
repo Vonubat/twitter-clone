@@ -36,15 +36,15 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
 
   return (
     <div className="flex h-[50px] w-full items-center bg-white">
-      <div className="flex w-full min-w-[580px] items-center">
+      <div className="flex w-full min-w-[650px] max-w-[650px] items-center">
         <div className="controls flex w-[65%] translate-x-[calc(100vw/3)] gap-1 overflow-x-auto">
-          <div className="tweets-counter__wrapper flex min-w-[100px] max-w-[100px] flex-col items-center border-sky-500">
+          <div className="tweets-counter__wrapper flex min-w-[80px] max-w-[80px] flex-col items-center border-sky-500">
             <span className="font-medium text-black text-opacity-50">Tweets</span>
             <span className="tweets-counter font-semibold text-sky-500">{tweets?.length}</span>
           </div>
           {isOwnerPage && (
             <button
-              className="tweets-btn__followers min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
+              className="tweets-btn__followers min-w-[80px] max-w-[80px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
               onClick={() => dispatch(setModalForm({ type: 'followers' }))}
             >
               <p>Followers</p>
@@ -53,10 +53,10 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
           )}
         </div>
         {isOwnerPage && (
-          <div className="relative flex">
+          <div className="controls__menu relative flex translate-x-[calc(100vw/3)]">
             <button
               ref={menuButtonRef}
-              className="menu-button tweets-btn__menu min-w-[100px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
+              className="menu-button tweets-btn__menu min-w-[60px] max-w-[60px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
               onClick={() => setIsMenuVisible((prevIsMenuVisible) => !prevIsMenuVisible)}
             >
               Menu

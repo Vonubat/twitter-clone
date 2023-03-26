@@ -11,14 +11,14 @@ import {
   userSelector,
   useUnfollowUserMutation,
 } from '../../redux';
-import {IUser} from '../../types';
+import {IBanned} from '../../types';
 import {getTimeForUserInfo} from '../../utils';
 
 import {Button} from './Button';
 import {useBanUserMutation, useGetBannedUsersQuery, useUnBanUserMutation} from "../../redux/api/usersApi";
 
 type Props = {
-  user: IUser;
+  user: IBanned;
 };
 
 export const UserInfo = ({ user }: Props): JSX.Element => {
@@ -90,6 +90,8 @@ export const UserInfo = ({ user }: Props): JSX.Element => {
     }
   }, [followings, owner, user.userId, ownerBannedUsers]);
 
+  const followBtnDisabled = user.banned?.some(user => user.userId === owner?.userId)
+
   return (
     <div className="user-info flex flex-col">
       <div className="user-info__menu flex w-40 justify-between">
@@ -152,6 +154,7 @@ export const UserInfo = ({ user }: Props): JSX.Element => {
       </div>
       {showHideBtn() && canShowFollow && (
         <Button
+          disabled={followBtnDisabled}
           size="small"
           type="button"
           color="solid"

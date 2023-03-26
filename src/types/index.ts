@@ -9,7 +9,6 @@ export interface IUser {
   lastName: string;
   location: string;
   joined: string;
-  banned?: IUser[]
 }
 
 export interface ILike {
@@ -76,6 +75,9 @@ export interface IFollowing extends IUser {
 }
 
 export interface IFollower extends IUser {}
+export interface IBanned extends IUser {
+  banned?: IUser[]
+}
 
 export type FollowUnfollowDto = {
   targetUserId: string;

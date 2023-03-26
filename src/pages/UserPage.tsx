@@ -60,6 +60,7 @@ export const UserPage = (): JSX.Element => {
         </div>
         <div className="tweets__container ml-0 flex max-w-lg flex-col gap-px p-2 md:p-0 lg:ml-[10%]">
           {user && tweets && showTweets && tweets.map((tweet) => <Tweet user={user} key={tweet.tweetId} tweet={tweet} />)}
+          {!showTweets && <div className="flex-grow px-2 font-medium">This page is not available for you! :(</div>}
         </div>
         <div className="banner__container hidden xl:block">{!owner && <Banner />}</div>
       </div>

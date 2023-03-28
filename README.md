@@ -1,7 +1,3 @@
-# Deploy:
-
-https://twitter-clone-symfa.netlify.app/
-
 ## Local setup
 
 0. Clone this repo and follow internal instructions: https://github.com/Vonubat/twitter-clone-backend

@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { BASE_URL } from '../../constants';
-import { FollowUnfollowDto, IFollower, IFollowing, InputGetUrl, IUser } from '../../types';
+import {FollowUnfollowDto, IBanned, IFollower, IFollowing, InputGetUrl, IUser} from '../../types';
 import { setCurrentUser, setFollowers, setFollowings } from '../slices/userSlice';
 
 export const usersApi = createApi({
@@ -18,7 +18,7 @@ export const usersApi = createApi({
       providesTags: (result) =>
         result ? [...result.map(({ userId }) => ({ type: 'User' as const, userId })), 'User'] : ['User'],
     }),
-    getUser: builder.query<IUser, IUser['username']>({
+    getUser: builder.query<IBanned, IUser['username']>({
       query: (username) => {
         return {
           url: username,
@@ -111,10 +111,34 @@ export const usersApi = createApi({
         );
       },
     }),
+
+    banUser: builder.mutation<IUser[], {targetUserId: string}>({
+      query: (data) => {
+        return {
+          url: '/ban',
+          method: 'POST',
+          body: data,
+        };
+      },
+    }),
+    unBanUser: builder.mutation<IUser[], {targetUserId: string}>({
+      query: (data) => {
+        return {
+          url: '/unban',
+          method: 'POST',
+          body: data,
+        };
+      },
+    }),
+    getBannedUsers: builder.query<IBanned[], void>({
+      query: () => '/ban/banned',
+    }),
     getFeedList: builder.query<IFollowing[], IUser | null>({
       query: () => '/feed/list',
     }),
   }),
+
+
 });
 
 export const {
@@ -127,4 +151,7 @@ export const {
   useGetAllFollowersQuery,
   useGetAllFollowingsQuery,
   useGetFeedListQuery,
+  useUnBanUserMutation,
+  useBanUserMutation,
+  useGetBannedUsersQuery
 } = usersApi;

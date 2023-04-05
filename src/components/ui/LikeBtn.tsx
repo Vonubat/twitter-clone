@@ -28,7 +28,7 @@ export const LikeBtn = ({ tweet, creatorOfTweet }: Props): JSX.Element => {
   };
 
   useEffect(() => {
-    if (owner) {
+    if (owner && likes) {
       const isOwnerLikePresent = likes.some(({ user }) => {
         return user?.userId === owner.userId;
       });

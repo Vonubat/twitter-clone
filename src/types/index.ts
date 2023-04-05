@@ -26,7 +26,7 @@ export interface ITweet {
 }
 
 export type ModalForm =
-  | { type: 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' | 'followers' }
+  | { type: 'login' | 'signup' | 'avatar' | 'cover' | 'newTweet' | 'followers' | 'banned'}
   | { type: 'editTweet'; tweet: ModalTweet }
   | null;
 
@@ -75,6 +75,9 @@ export interface IFollowing extends IUser {
 }
 
 export interface IFollower extends IUser {}
+export interface IBanned extends IUser {
+  banned?: IUser[]
+}
 
 export type FollowUnfollowDto = {
   targetUserId: string;

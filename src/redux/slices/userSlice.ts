@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { IFollower, IFollowing, IUser } from '../../types';
+import {IBanned, IFollower, IFollowing, IUser} from '../../types';
 
 type UserState = {
   currentUser: IUser | null;
-  owner: IUser | null;
+  owner: IBanned | null;
   followings: IFollowing[];
   followers: IFollower[];
 };

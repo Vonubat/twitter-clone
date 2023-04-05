@@ -26,7 +26,6 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
 
   useEffect(() => {
     const handleMouseDown = (event: MouseEvent) => handleClickOutside(event);
-
     document.addEventListener('mousedown', handleMouseDown);
 
     return () => {
@@ -49,6 +48,15 @@ export const ControlBar = ({ user }: Props): JSX.Element => {
             >
               <p>Followers</p>
               <p className="text-sky-500">{followers.length}</p>
+            </button>
+          )}
+          {isOwnerPage && (
+            <button
+              className="tweets-btn__followers min-w-[80px] max-w-[100px] border-b-2 border-transparent text-center font-medium text-black text-opacity-50 active:border-sky-500"
+              onClick={() => dispatch(setModalForm({ type: 'banned' }))}
+            >
+              <p>Banned users</p>
+              <p className="text-sky-500">{owner.banned?.length}</p>
             </button>
           )}
         </div>
